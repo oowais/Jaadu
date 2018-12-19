@@ -1,4 +1,4 @@
-# MCP-Alien-Arduino-Code
+# MCP-Alien
 Arduino codes for various elements of Alien created as part of MCP Praktikum
 
 ## Dependencies/Libraries
