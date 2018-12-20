@@ -1,9 +1,14 @@
 #include <Servo.h>
 
-//VCC -> 3.3V
-//GND -> GND
-//TXD -> RX
-//RXD -> TX
+/*
+The circuit:
+
+VCC -> 3.3V
+GND -> GND
+TXD -> RX
+RXD -> TX
+
+*/
 Servo myservo;
 
 void setup() {
