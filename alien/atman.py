@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 
-"""atman.py : Initial point of setup."""
+"""atman.py : The beginning."""
 
 import argparse
 import logging
+import sys
+
+from lib.samsara import ExternalConnector
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Alien Setup')
@@ -20,7 +24,14 @@ if __name__ == "__main__":
         log_file_handler.setFormatter(formatter)
         logger.addHandler(log_file_handler)
 
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    logger.addHandler(stdout_handler)
+
     if args.verbose:
         logger.setLevel(level=logging.DEBUG)
     else:
         logger.setLevel(level=logging.INFO)
+
+    world_events_listener = ExternalConnector()
+    world_events_listener.start()
+    world_events_listener.join()
