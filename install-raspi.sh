@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo apt-get update -y
-sudo apt-get install git python3-pip mosquitto -y
+sudo apt-get install git python3-pip mosquitto libbluetooth-dev -y
 
 sudo rm -rf /home/pi/brain/
 
@@ -27,7 +27,7 @@ echo "StandardOutput=inherit" >> alien.service
 echo "StandardError=inherit" >> alien.service
 echo "User=pi" >> alien.service
 echo "WorkingDirectory=/home/pi/brain/alien" >> alien.service
-echo "ExecStart=/usr/bin/python3 atman.py" >> alien.service
+echo "ExecStart=$python3_loc atman.py" >> alien.service
 echo "" >> alien.service
 echo "[Install]" >> alien.service
 echo "WantedBy=multi-user.target" >> alien.service
