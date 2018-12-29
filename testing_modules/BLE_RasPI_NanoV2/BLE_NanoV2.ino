@@ -1,7 +1,7 @@
 /*
  * Sends 3 values of counter - past, present, future using UART BLE service
  */
- 
+
 #include <nRF5x_BLE_API.h>
 
 #define DEVICE_NAME "BLE_Peripheral"
@@ -9,7 +9,6 @@
 
 BLE ble;
 Timeout timeout;
-Timeout timeout1;
 
 static uint8_t rx_buf[TXRX_BUF_LEN];
 static uint8_t rx_buf_num;
@@ -32,34 +31,29 @@ void disconnectionCallBack(const Gap::DisconnectionCallbackParams_t *params) {
   ble.startAdvertising();
 }
 
-void m_uart_rx_handle() {
-  if (rx_buf_num > 0) {
-    ble.updateCharacteristicValue(characteristic2.getValueAttribute().getHandle(), rx_buf, rx_buf_num);
-    memset(rx_buf, 0x00, 20);
-    rx_buf_num = 0;
-  }
-  timeout.attach_us(m_uart_rx_handle, 100000);
-}
-
 void increase_counter() {
     rx_buf_num = 4;
 
     if (counter > 256) {
       counter = 0;
     }
-    
+
     rx_buf[0] = rx_buf_num - 1; // number of items
     rx_buf[1] = counter++; // past
     rx_buf[2] = counter;   // present
     rx_buf[3] = counter + 1; // future
-    
-    timeout1.attach_us(increase_counter, 1000000);
+
+    ble.updateCharacteristicValue(characteristic2.getValueAttribute().getHandle(), rx_buf, rx_buf_num);
+    memset(rx_buf, 0x00, TXRX_BUF_LEN);
+    rx_buf_num = 0;
+
+    timeout.attach_us(increase_counter, 1000000);
 }
 
 void setup() {
   counter = 0;
-  timeout.attach_us(m_uart_rx_handle, 100000); // the time here is in micro-seconds
-  timeout1.attach_us(increase_counter, 1000000); // called every 1 second
+  timeout.attach_us(increase_counter, 1000000); // the time here is in micro-seconds
+
   ble.init();
   ble.onDisconnection(disconnectionCallBack);
 
