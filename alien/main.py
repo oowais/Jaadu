@@ -1,22 +1,21 @@
-#!/usr/bin/env python3
-
 """atman.py : The beginning."""
 
 import argparse
 import logging
 import sys
 
-from lib.samsara import ExternalConnector
+from lib.atman import TriggerEvents
+from lib.globals import LOGGER_TAG
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Alien Setup')
+    parser = argparse.ArgumentParser(description='Alien')
     parser.add_argument("--verbose", "-v", action="store_true")
     parser.add_argument("--log_file", "-lf", default=None, help="Set path to save log output")
     args = parser.parse_args()
 
     # --------------- Logging setup ---------------------
-    logger = logging.getLogger("alien")
+    logger = logging.getLogger(LOGGER_TAG)
 
     if args.log_file:
         log_file_handler = logging.FileHandler(args.log_file)
@@ -32,6 +31,6 @@ if __name__ == "__main__":
     else:
         logger.setLevel(level=logging.INFO)
 
-    world_events_listener = ExternalConnector()
-    world_events_listener.start()
-    world_events_listener.join()
+    trigger_events = TriggerEvents()
+    trigger_events.start()
+    trigger_events.join()
