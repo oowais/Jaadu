@@ -8,10 +8,13 @@ from lib.globals import LOGGER_TAG, TRIGGER_SRV_HOST, TRIGGER_SRV_PORT
 class ExternalTriggerHandler(socketserver.BaseRequestHandler):
     def handle(self):
         logger = logging.getLogger(LOGGER_TAG)
-        command = self.request.recv(1024).strip()
-        logger.info("Received External command from {}. Command : {}".
-                    format(self.client_address, command))
-        self.server.forward_command(command.decode("utf-8"))
+        try:
+            command = self.request.recv(1024).strip().decode("utf-8")
+            logger.info("Received External command from {}. Command : {}".
+                        format(self.client_address, command))
+            self.server.forward_command(command)
+        except Exception:
+            pass
 
 
 class CustomizedTCPServer(socketserver.TCPServer):
@@ -27,13 +30,13 @@ class CustomizedTCPServer(socketserver.TCPServer):
 
 class ExternalTrigger(threading.Thread):
     def __init__(self, talk_queue):
-        self.talk_queue = talk_queue
         super(ExternalTrigger, self).__init__()
+        self.talk_queue = talk_queue
+        self.logger = logging.getLogger(LOGGER_TAG)
 
     def run(self):
-        logger = logging.getLogger(LOGGER_TAG)
-        logger.info("Starting External Command listener at {}:{}".
-                    format(TRIGGER_SRV_HOST, TRIGGER_SRV_PORT))
+        self.logger.info("Starting off External Command listener at {}:{} ...".
+                         format(TRIGGER_SRV_HOST, TRIGGER_SRV_PORT))
         server = CustomizedTCPServer(server_address=(TRIGGER_SRV_HOST, TRIGGER_SRV_PORT),
                                      RequestHandlerClass=ExternalTriggerHandler,
                                      talk_queue=self.talk_queue)

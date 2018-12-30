@@ -33,6 +33,7 @@ class TriggerEvents(threading.Thread):
         ext_trigger_obj.start()
 
     def run(self):
+        self.logger.debug("Starting off Event trigger Listener ...")
         # Get events and send them to respective processes
         while True:
             if self.event_queue.empty():
