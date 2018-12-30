@@ -27,7 +27,7 @@ echo "StandardOutput=inherit" >> alien.service
 echo "StandardError=inherit" >> alien.service
 echo "User=pi" >> alien.service
 echo "WorkingDirectory=/home/pi/brain/alien" >> alien.service
-echo "ExecStart=$python3_loc atman.py" >> alien.service
+echo "ExecStart=$python3_loc atman.py -s -lf alien.logs" >> alien.service
 echo "" >> alien.service
 echo "[Install]" >> alien.service
 echo "WantedBy=multi-user.target" >> alien.service
