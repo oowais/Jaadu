@@ -11,7 +11,7 @@ dis = Matrix8x8.Matrix8x8()
 # Initialize the display. Must be called once before using the display.
 dis.begin()
 
-image = [(1,2),(1,3),(1,4),(1,5),(2,1),(2,2),(2,3),(2,4),(2,5),(2,6),(3,1),(3,2),(3,3),
+eye_ball = [(1,2),(1,3),(1,4),(1,5),(2,1),(2,2),(2,3),(2,4),(2,5),(2,6),(3,1),(3,2),(3,3),
 		 (3,4),(3,5),(3,6),(4,1),(4,2),(4,3),(4,4),(4,5),(4,6),(5,1),(5,2),(5,3),(5,4),
 		 (5,5),(5,6),(6,2),(6,3),(6,4),(6,5)]
 # Run through each pixel individually and turn it on.
@@ -30,7 +30,7 @@ try:
 	time.sleep(0.2)
 
 	print('Eye-ball')
-	for a in image:
+	for a in eye_ball:
 		dis.set_pixel(a[0],a[1],1)
 	dis.write_display()
 
