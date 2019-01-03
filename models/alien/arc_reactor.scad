@@ -18,9 +18,9 @@ module arc_reactor() {
     difference() {
         union() {
             pattern();
-            cylinder(h=5, r=0.3);
+            rotate([5, 0, 0]) cylinder(h=5, r=0.3);
         }
-        translate([0, 0, -0.1]) cylinder(r=0.2, h=7);
+        rotate([5, 0, 0]) translate([0, 0, -0.1]) cylinder(r=0.2, h=7);
         translate([0, 5, 0.7]) rotate([90, 0, 0]) cylinder(d=0.2, h=10);
         translate([-5, 0, 1.1]) rotate([0, 90, 0]) cylinder(d=0.2, h=10);
     }

@@ -32,8 +32,8 @@ module face() {
         
         translate([0, 4, -8]) cylinder(h=2, r=0.4);
         hull() {
-            translate([0, 4, -6.8]) cylinder(h=1, r=0.4);
-            translate([0, 2.5, -6.8]) cylinder(h=2, r=0.2);
+            translate([0, 4, -6.7]) cylinder(h=1, r=0.4);
+            translate([0, 2.5, -6.7]) cylinder(h=2, r=0.2);
         }
         
         translate([1.5, -1.1, -1.5]) cube([3.25, 2, 3.25]);
