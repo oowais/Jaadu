@@ -16,6 +16,26 @@ python3_loc=`which python3`
 
 cd alien; eval $pip3_loc "install -r requirements.txt"
 
+echo -n "Do you wish to setup backdoor access for Alien [y/n] : "
+read ans
+if [ $ans == "y" ]
+then
+  echo "Enter users or press ctrl+c to stop ..."
+  while :
+  do
+    echo -e "\nEnter Credentials for USER --- "
+    echo -n "User ID : "
+    read userid
+    echo -n "PassWord : "
+    read -s passwd
+    salt=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
+    echo "Generated a random 20 character salt : $salt"
+    hasher=$(echo -n "$salt$userid$passwd" | sha256sum | awk '{print $1}')
+    # Need to check if sha256 is actually there in Raspbian
+    echo "$userid:$salt:$hasher" >> auth_info
+  done
+fi
+
 echo "[Unit]" > alien.service
 echo "Description=Alien" >> alien.service
 echo "After=network.target" >> alien.service

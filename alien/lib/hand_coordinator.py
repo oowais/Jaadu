@@ -5,9 +5,9 @@ import time
 from lib.globals import LOGGER_TAG
 
 
-class HandCoordinator(threading.Thread):
+class MargDarshan(threading.Thread):
     def __init__(self, talk_queue):
-        super(HandCoordinator, self).__init__()
+        super(MargDarshan, self).__init__(name="MargDarshan")
         self.logger = logging.getLogger()
         self.q = talk_queue
 

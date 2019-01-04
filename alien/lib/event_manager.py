@@ -3,17 +3,16 @@ import queue
 import threading
 import time
 
-from lib.deva import ExternalTrigger
 from lib.globals import LOGGER_TAG
-from lib.karma import Walker
-from lib.marg import HandCoordinator
-from lib.maya import Emotioner
-from lib.samsara import ExternalConnector
+from lib.movement import Karma
+from lib.hand_coordinator import MargDarshan
+from lib.emotion_displayer import Maya
+from lib.mqtt_listener import Samsara
 
 
-class TriggerEvents(threading.Thread):
+class Atman(threading.Thread):
     def __init__(self):
-        super(TriggerEvents, self).__init__()
+        super(Atman, self).__init__(name="Atman")
         self.logger = logging.getLogger(LOGGER_TAG)
         self.event_queue = queue.Queue()
         self.emotional_queue = queue.Queue()
@@ -21,19 +20,17 @@ class TriggerEvents(threading.Thread):
         self.setup()
 
     def setup(self):
-        mqtt_obj = ExternalConnector()
-        walker_obj = Walker(listen_queue=self.walking_queue)
-        emotional_obj = Emotioner(listen_queue=self.emotional_queue, info_src=mqtt_obj)
-        hand_ifc_obj = HandCoordinator(talk_queue=self.event_queue)
-        ext_trigger_obj = ExternalTrigger(talk_queue=self.event_queue)
+        mqtt_obj = Samsara(talk_queue=self.event_queue)
+        walker_obj = Karma(listen_queue=self.walking_queue)
+        emotional_obj = Maya(listen_queue=self.emotional_queue, info_src=mqtt_obj)
+        hand_ifc_obj = MargDarshan(talk_queue=self.event_queue)
         mqtt_obj.start()
         walker_obj.start()
         emotional_obj.start()
         hand_ifc_obj.start()
-        ext_trigger_obj.start()
 
     def run(self):
-        self.logger.debug("Starting off Event trigger Listener ...")
+        self.logger.info("Starting off Event trigger Listener ...")
         # Get events and send them to respective processes
         while True:
             if self.event_queue.empty():
