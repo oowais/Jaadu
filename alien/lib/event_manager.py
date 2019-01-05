@@ -37,6 +37,7 @@ class Atman(threading.Thread):
                 time.sleep(1)
             else:
                 item = self.event_queue.get()
+                self.logger.debug("Received event : {}".format(item))
                 if item == "clear":
                     # Clear all items in all controlled Queues
                     pass

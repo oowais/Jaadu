@@ -9,3 +9,4 @@ EXTERNAL_BROKER_PORT = 1883
 
 # Backdoor Auth
 AUTH_INFO_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "auth_info")
+KEEP_STREAM_TIME = 120

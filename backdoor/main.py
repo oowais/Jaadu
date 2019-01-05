@@ -5,22 +5,25 @@ import json
 import logging
 import os
 import paho.mqtt.client as mqtt
-import random
+import secrets
 import sys
 
 
 def handle_salt(client, userdata, msg):
     logger = logging.getLogger("alien_backdoor")
     try:
-        userid = msg.topic.split("/")[1]
+        userid = msg.topic.split("/")[-1]
     except Exception:
         logger.error("Could not get back the userID. Exiting...")
         client.disconnect()
         return
-    client.unsubscribe("atman/{}".format(userid))
-    salt = msg.payload.decode("utf-8")
-    if salt == "NONE":
-        logger.error("User {} not found with server. Exiting ...".format(userid))
+
+    client.message_callback_remove(sub=msg.topic)
+    client.unsubscribe(msg.topic)
+    payload = json.loads(msg.payload.decode("utf-8"))
+    status, salt, code = payload.get("status", None), payload.get("salt", None), payload.get("code", None)
+    if status == "deny":
+        logger.error("Cannot connect with backdoor. Exiting ...")
         client.disconnect()
         return
     logger.debug("Received salt {} for USerID {}".format(salt, userid))
@@ -30,35 +33,45 @@ def handle_salt(client, userdata, msg):
         client.disconnect()
         return
 
-    key =  "{}{}{}".format(salt, userid, passwd)
-    new_topic = hashlib.sha256(key.encode()).hexdigest()
-    token = "".join(random.choices(population=["0", "1", "2", "3", "4", "5", "6", "7", "8",
-                                               "9", "a", "b", "c", "d", "e", "f"], k=20))
-    logger.debug("Chosen Client Token : {}, will be listening here".format(token))
+    secret = hashlib.sha256("{}{}{}".format(salt, userid, passwd).encode()).hexdigest()
+    userdata["secret"] = secret
+    client.user_data_set(userdata)
+    bkdoor_topic = "atman/backdoor/server/{}".format(hashlib.sha256("{}{}".format(secret, code).encode()).hexdigest())
+    new_code = secrets.token_hex(10)
+    client_stream_topic = "atman/backdoor/client/{}".format(hashlib.sha256("{}{}".format(secret, new_code).encode()).hexdigest())
 
-    client.message_callback_add(sub=token, callback=handle_commands)
-    client.subscribe(token)
-    client.publish(topic=new_topic, payload=token)
+    client.message_callback_add(sub=client_stream_topic, callback=handle_commands)
+    client.subscribe(client_stream_topic)
+    client.publish(topic=bkdoor_topic, payload=json.dumps({"userid" : userid,
+                                    "code" : new_code, "command" : "start"}))
 
 
 def handle_commands(client, userdata, msg):
     logger = logging.getLogger("alien_backdoor")
-    cmd_rcvd = msg.payload.decode("utf-8")
-    if cmd_rcvd == "OK":
-        logger.info("Received successfully at Backdoor {} ...".format(userdata.get(msg.topic)))
-    elif cmd_rcvd == "disconnect":
-        logger.info("Disconnected from Backdoor {}. Exiting ...".format(userdata.get(msg.topic)))
+    payload = json.loads(msg.payload.decode("utf-8"))
+    userid, status, code = payload.get("userid", None), payload.get("status", None), payload.get("code", None)
+    if userid != userdata["userid"]:
+        return
+
+    client.message_callback_remove(sub=msg.topic)
+    client.unsubscribe(msg.topic)
+    if status == "ok":
+        logger.info("Received successfully at Backdoor ...")
+    elif status == "disconnect":
+        logger.info("Disconnected from Backdoor. Exiting ...")
         client.disconnect()
         return
-    elif len(cmd_rcvd) == 20:
-        # This is the server token
-        userdata[msg.topic] = cmd_rcvd
-        logger.debug("Communication channel setup : {} (alien) <-> {} (client)".format(cmd_rcvd, msg.topic))
     else:
         return
 
     command = input("\nSend command : ")
-    client.publish(topic=userdata.get(msg.topic), payload=command)
+    bkdoor_topic = "atman/backdoor/server/{}".format(hashlib.sha256("{}{}".format(userdata["secret"], code).encode()).hexdigest())
+    new_code = secrets.token_hex(10)
+    client_stream_topic = "atman/backdoor/client/{}".format(hashlib.sha256("{}{}".format(userdata["secret"], new_code).encode()).hexdigest())
+    client.message_callback_add(sub=client_stream_topic, callback=handle_commands)
+    client.subscribe(client_stream_topic)
+    payload = json.dumps({"userid" : userid, "code" : new_code, "command" : command})
+    client.publish(topic=bkdoor_topic, payload=payload)
 
 
 if __name__ == "__main__":
@@ -88,15 +101,14 @@ if __name__ == "__main__":
             sys.exit(0)
     logger.info("Connecting to MQTT host {} at port {}".format(host, port))
 
-    client = mqtt.Client(userdata={})
-
     userid = input("Enter UserID : ")
     logger.info("Sending request to Check USERID with Alien ...")
 
+    client = mqtt.Client(userdata={"userid" : userid})
     client.connect(host=host, port=port)
-    topic = "atman/{}".format(userid)
+    topic = "atman/backdoor/{}".format(userid)
     client.message_callback_add(sub=topic, callback=handle_salt)
     client.subscribe(topic)
-    client.publish(topic="atman/auth", payload=userid)
+    client.publish(topic="atman/backdoor/auth", payload=userid)
 
     client.loop_forever()
