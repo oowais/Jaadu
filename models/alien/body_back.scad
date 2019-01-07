@@ -1,4 +1,4 @@
-include <body.scad>
+use <body.scad>
 
 module body_back() {
     difference() {

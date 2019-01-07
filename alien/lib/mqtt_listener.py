@@ -13,7 +13,7 @@ from lib.globals import (EXTERNAL_BROKER_HOST, EXTERNAL_BROKER_PORT, LOGGER_TAG,
 
 class Samsara(threading.Thread):
     def __init__(self, talk_queue):
-        super(Samsara, self).__init__(name="Samsara")
+        super(Samsara, self).__init__(name=type(self).__name__)
         self.q = talk_queue
         self.logger = logging.getLogger(LOGGER_TAG)
         self.client = mqtt.Client(userdata={})

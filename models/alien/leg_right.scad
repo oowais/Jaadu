@@ -1,6 +1,4 @@
-$fn = 100;
-
-scale([10, 10, 10]) {
+module leg_right() {
     difference() {
         hull() {
             translate([0, 0, 2.5]) cube([3.8, 2, 3]);
@@ -31,3 +29,6 @@ scale([10, 10, 10]) {
         translate([0.2, 1, 4.6]) sphere(0.2);
     }  
 }
+
+$fn=300;
+scale([10, 10, 10]) leg_right();

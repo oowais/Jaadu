@@ -20,6 +20,7 @@ module cup_right() {
         rotate([0, 0, 225]) translate([-5, 0, -0.1]) cube([10, 10, 3]);
     }
 }
+
 $fn=300;
 scale([10, 10, 10]) translate([0.5, -0.5, 0]) cup_left();
 scale([10, 10, 10]) translate([-0.5, 0.5, 0]) cup_right();

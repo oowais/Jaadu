@@ -4,7 +4,8 @@ import os
 LOGGER_TAG = "alien"
 
 # External MQTT Address
-EXTERNAL_BROKER_HOST = "localhost"
+EXTERNAL_BROKER_HOST = "localhost" # testing, to be removed
+#EXTERNAL_BROKER_HOST = "terrarium"
 EXTERNAL_BROKER_PORT = 1883
 
 # Backdoor Auth

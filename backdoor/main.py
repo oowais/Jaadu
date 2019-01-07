@@ -41,7 +41,7 @@ def handle_salt(client, userdata, msg):
     client_stream_topic = "atman/backdoor/client/{}".format(hashlib.sha256("{}{}".format(secret, new_code).encode()).hexdigest())
 
     client.message_callback_add(sub=client_stream_topic, callback=handle_commands)
-    client.subscribe(client_stream_topic)
+    client.subscribe("atman/backdoor/client/#")
     client.publish(topic=bkdoor_topic, payload=json.dumps({"userid" : userid,
                                     "code" : new_code, "command" : "start"}))
 
@@ -54,7 +54,6 @@ def handle_commands(client, userdata, msg):
         return
 
     client.message_callback_remove(sub=msg.topic)
-    client.unsubscribe(msg.topic)
     if status == "ok":
         logger.info("Received successfully at Backdoor ...")
     elif status == "disconnect":
@@ -69,7 +68,6 @@ def handle_commands(client, userdata, msg):
     new_code = secrets.token_hex(10)
     client_stream_topic = "atman/backdoor/client/{}".format(hashlib.sha256("{}{}".format(userdata["secret"], new_code).encode()).hexdigest())
     client.message_callback_add(sub=client_stream_topic, callback=handle_commands)
-    client.subscribe(client_stream_topic)
     payload = json.dumps({"userid" : userid, "code" : new_code, "command" : command})
     client.publish(topic=bkdoor_topic, payload=payload)
 

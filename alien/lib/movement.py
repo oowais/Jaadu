@@ -7,7 +7,7 @@ from lib.globals import LOGGER_TAG
 
 class Karma(threading.Thread):
     def __init__(self, listen_queue):
-        super(Karma, self).__init__(name="Karma")
+        super(Karma, self).__init__(name=type(self).__name__)
         self.logger = logging.getLogger(LOGGER_TAG)
         self.q = listen_queue
 

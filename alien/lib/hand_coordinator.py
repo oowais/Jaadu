@@ -7,7 +7,7 @@ from lib.globals import LOGGER_TAG
 
 class MargDarshan(threading.Thread):
     def __init__(self, talk_queue):
-        super(MargDarshan, self).__init__(name="MargDarshan")
+        super(MargDarshan, self).__init__(name=type(self).__name__)
         self.logger = logging.getLogger()
         self.q = talk_queue
 

@@ -12,7 +12,7 @@ from lib.mqtt_listener import Samsara
 
 class Atman(threading.Thread):
     def __init__(self):
-        super(Atman, self).__init__(name="Atman")
+        super(Atman, self).__init__(name=type(self).__name__)
         self.logger = logging.getLogger(LOGGER_TAG)
         self.event_queue = queue.Queue()
         self.emotional_queue = queue.Queue()

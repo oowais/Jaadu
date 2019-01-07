@@ -7,7 +7,7 @@ from lib.globals import LOGGER_TAG
 
 class Maya(threading.Thread):
     def __init__(self, listen_queue, info_src):
-        super(Maya, self).__init__(name="Maya")
+        super(Maya, self).__init__(name=type(self).__name__)
         self.logger = logging.getLogger(LOGGER_TAG)
         self.info_src = info_src
         self.q = listen_queue

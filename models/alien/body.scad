@@ -50,7 +50,6 @@ module basic_body(support=true) {
     }
 }
 
-/*
+
 $fn=300;
 basic_body();
-*/
