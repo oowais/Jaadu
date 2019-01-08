@@ -31,7 +31,6 @@ then
     salt=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
     echo "Generated a random 20 character salt : $salt"
     hasher=$(echo -n "$salt$userid$passwd" | sha256sum | awk '{print $1}')
-    # Need to check if sha256 is actually there in Raspbian
     echo "$userid:$salt:$hasher" >> auth_info
   done
 fi

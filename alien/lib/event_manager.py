@@ -29,18 +29,33 @@ class Atman(threading.Thread):
         emotional_obj.start()
         hand_ifc_obj.start()
 
+    def pass_item_to_module(self, item):
+        module, command, times = [i.strip() for i in item]
+        try:
+            times = int(times)
+        except ValueError:
+            times = 1
+            
+        if module == "move":
+            self.walking_queue.put(tuple([command, times]))
+        else:
+            pass
+
     def run(self):
         self.logger.info("Starting off Event trigger Listener ...")
         # Get events and send them to respective processes
         while True:
             if self.event_queue.empty():
                 time.sleep(1)
+                continue
+            item = self.event_queue.get()
+            self.logger.debug("New event : {}".format(item))
+            item_parts = item.split()
+            module, command, times = None, None, 1
+            if len(item_parts) == 2:
+                module, command = item_parts
+            elif len(item_parts) == 3:
+                module, command, times = item_parts
             else:
-                item = self.event_queue.get()
-                self.logger.debug("Received event : {}".format(item))
-                if item == "clear":
-                    # Clear all items in all controlled Queues
-                    pass
-                elif item == "walk":
-                    # Send event to walking module
-                    pass
+                continue
+            self.pass_item_to_module(item=tuple([module, command, times]))

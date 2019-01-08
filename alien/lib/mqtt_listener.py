@@ -3,12 +3,12 @@ import json
 import logging
 import os
 import paho.mqtt.client as mqtt
-import secrets
 import threading
 import time
 
 from lib.globals import (EXTERNAL_BROKER_HOST, EXTERNAL_BROKER_PORT, LOGGER_TAG,
                          AUTH_INFO_PATH, KEEP_STREAM_TIME)
+from lib.secrets import token_hex
 
 
 class Samsara(threading.Thread):
@@ -35,7 +35,7 @@ class Samsara(threading.Thread):
         hashes_taken = list(self.auth_topic_user.keys())
         hashes_taken.append(new_hash)
         while new_hash in hashes_taken:
-            new_code = secrets.token_hex(10)
+            new_code = token_hex(10)
             new_hash = hashlib.sha256("{}{}".format(secret, new_code).encode()).hexdigest()
         new_topic = "atman/backdoor/server/{}".format(new_hash)
         return new_hash, new_topic, new_code
