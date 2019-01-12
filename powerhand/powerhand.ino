@@ -1,46 +1,109 @@
+#include <SoftwareSerial.h>
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
 #include <avr/power.h>
 #endif
 
 #define PIN 4
+/*
+  The circuit:
+  - analog 7: z-axis
+  - analog 6: y-axis
+  - analog 5: x-axis
+  Possble Case-
+  - analog 0/GND: VCC
+  - analog 4/5V: GND
+*/
 
-// Parameter 1 = number of pixels in strip
-// Parameter 2 = Arduino pin number (most are valid)
-// Parameter 3 = pixel type flags, add together as needed:
-//   NEO_KHZ800  800 KHz bitstream (most NeoPixel products w/WS2812 LEDs)
-//   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
-//   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
-//   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
-//   NEO_RGBW    Pixels are wired for RGBW bitstream (NeoPixel RGBW products)
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(27, PIN, NEO_GRB + NEO_KHZ800);
+/*
+  Wires:
+  Red: A0/VCC
+  Grey: A4/GND
+  Yellow: X_OUT A1
+  Purple: Y_OUT A2
+  Orange: Z_OUT A3
 
-// IMPORTANT: To reduce NeoPixel burnout risk, add 1000 uF capacitor across
-// pixel power leads, add 300 - 500 Ohm resistor on first pixel's data input
-// and minimize distance between Arduino and first pixel.  Avoid connecting
-// on a live circuit...if you must, connect GND first.
+*/
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(10, PIN, NEO_GRB + NEO_KHZ800);
+SoftwareSerial bt (5, 6);
+char expression;
+char motion;
+
+const int groundpin = A4;
+const int powerpin = A0;
+const int xPin = A1;
+const int yPin = A2;
+const int zPin = A3;
+
+int xInit;
+int yInit;
+int zInit;
+
+int xRead;
+int yRead;
+int zRead;
 
 void setup() {
+  pinMode(groundpin, OUTPUT);
+  pinMode(powerpin, OUTPUT);
+  digitalWrite(groundpin, LOW);
+  digitalWrite(powerpin, HIGH);
+
   strip.begin();
-  strip.show(); // Initialize all pixels to 'off'
+  strip.show();
+
+  bt.begin(9600);
+  Serial.begin(9600);
+  Serial.print("Bluetooth ON!");
 }
 
 void loop() {
-  // Some example procedures showing how to display to the pixels:
-  //  colorWipe(strip.Color(255, 0, 0), 50); // Red
-  //  colorWipe(strip.Color(0, 255, 0), 50); // Green
-  //  colorWipe(strip.Color(0, 0, 255), 50); // Blue
-  //  colorWipe(strip.Color(255, 255, 255), 50); // White RGBW
 
-  // Send a theater pixel chase in...
-  //  theaterChase(strip.Color(255, 255, 255), 50); // White
-  //  theaterChase(strip.Color(255, 0, 0), 50); // Red
-  theaterChase(strip.Color(0, 255, 0), 50); // Green
-  //  theaterChase(strip.Color(0, 0, 255), 50); // Blue
+  xRead = analogRead(xPin);
+  yRead = analogRead(yPin);
+  zRead = analogRead(zPin);
 
-  //rainbow(20);
-  //rainbowCycle(20);
-  //  theaterChaseRainbow(50);
+  //if (zRead < 330) //Hand face up
+  //else if (zRead > 400) //Hand face down
+
+  if (xRead > 310 && xRead < 380 && yRead > 290 && yRead < 370) //stop
+    motion = 's';
+
+  else {
+    //if (yRead < 290) //Back
+    if (yRead > 370) //Forward
+      motion = 'f';
+
+    if (xRead < 310) //Left
+      motion = 'l';
+    else if (xRead > 380) //Right
+      motion = 'r';
+  }
+  bt.print(motion);
+  if (bt.available()) {
+    expression = bt.read();
+    if (expression == 'h')
+      //Serial.println("Happy");
+      fill(strip.Color(0, 255, 0));
+    else if (expression == 's')
+      //Serial.println("Sad");
+      fill(strip.Color(0, 0, 255));
+    else if (expression == 'a')
+      //Serial.println("Angry");
+      fill(strip.Color(255, 0, 0));
+    else if (expression == 'z')
+      Serial.println("Sleepy");
+    //theaterChaseRainbow(50);
+
+  }
+  delay(1000);
+}
+
+void fill(uint32_t c) {
+  for (uint16_t i = 0; i < strip.numPixels(); i++) {
+    strip.setPixelColor(i, c);
+    strip.show();
+  }
 }
 
 // Fill the dots one after the other with a color
