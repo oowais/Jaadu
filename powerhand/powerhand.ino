@@ -66,7 +66,7 @@ void loop() {
   //if (zRead < 330) //Hand face up
   //else if (zRead > 400) //Hand face down
 
-  if (xRead > 310 && xRead < 380 && yRead > 290 && yRead < 370) //stop
+  if (xRead > 320 && xRead < 380 && yRead > 290 && yRead < 370) //stop
     motion = 's';
 
   else {
@@ -74,7 +74,7 @@ void loop() {
     if (yRead > 370) //Forward
       motion = 'f';
 
-    if (xRead < 310) //Left
+    if (xRead < 320) //Left
       motion = 'l';
     else if (xRead > 380) //Right
       motion = 'r';

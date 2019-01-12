@@ -33,7 +33,7 @@ if not sock:
 while 1:
     data = ''
     data = str(sock.recv(1))
-    print(data)
+    # print(data)
     data = data[2:-1]
     if data =='f':
         print('Forward!')
