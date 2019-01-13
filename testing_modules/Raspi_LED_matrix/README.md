@@ -21,15 +21,15 @@ Test if spi interface
 [Github Link](https://github.com/adafruit/Adafruit_Python_LED_Backpack) 
 ```
 sudo apt-get update
-sudo apt-get install -y git build-essential python-dev python-smbus python-imaging python-pip python-pil
+sudo apt-get install -y git build-essential python3-dev python3-smbus python-imaging python3-pip python3-pil
 
 
 git clone https://github.com/adafruit/Adafruit_Python_LED_Backpack.git
 cd Adafruit_Python_LED_Backpack
-sudo python setup.py install
+sudo python3 setup.py install
 ```
 Then run eye.py using  
-supo python eye.py
+supo python3 eye.py
 
 > More eye expression to be added.
 

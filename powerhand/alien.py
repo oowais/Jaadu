@@ -37,16 +37,14 @@ while 1:
     data = data[2:-1]
     if data =='f':
         print('Forward!')
-        sock.send('h') # send happy emotion when moving forward
     elif data == 'l':
         print('Left!')
-        sock.send('s') # send sad emotion when moving left
     elif data == 'r':
         print('Right!')
-        sock.send('a') # send angry emotion when moving right
-    elif data == 's':
+    elif data == 'x':
         print('Stop!')
-        sock.send('z') # send sleepy emotion when stop moving
-    sleep(1)
-
+    elif data == 'u':
+        print('Up @ Squid')
+        #e = input('Enter h for happy, s for sad, a for angry, z for sleepy, u for squid-expression')
+        sock.send('h')
 sock.close()

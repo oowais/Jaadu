@@ -29,11 +29,20 @@ SoftwareSerial bt (5, 6);
 char expression;
 char motion;
 
+const int buttonPin = 9;
 const int groundpin = A4;
 const int powerpin = A0;
 const int xPin = A1;
 const int yPin = A2;
 const int zPin = A3;
+
+const uint32_t lemon = strip.Color(255, 165, 0); //surprise
+const uint32_t red = strip.Color(255, 0, 0); //angry
+const uint32_t green = strip.Color(0, 255, 0); //happy
+const uint32_t blue = strip.Color(0, 0, 255); //sad
+const uint32_t greenishBlue = strip.Color(0, 127, 34); //sending data
+const uint32_t cyan = strip.Color(0, 255, 255); //sleepy
+const uint32_t off = strip.Color(0, 0, 0);
 
 int xInit;
 int yInit;
@@ -43,9 +52,12 @@ int xRead;
 int yRead;
 int zRead;
 
+int buttonState = 0;
+
 void setup() {
   pinMode(groundpin, OUTPUT);
   pinMode(powerpin, OUTPUT);
+  pinMode(buttonPin, INPUT);
   digitalWrite(groundpin, LOW);
   digitalWrite(powerpin, HIGH);
 
@@ -58,7 +70,31 @@ void setup() {
 }
 
 void loop() {
+  buttonState = digitalRead(buttonPin);
+  while (buttonState == LOW) {
+    motion = getDataFromGyro();
+    if (motion != 's') {
+      sendDataToRaspi(motion);
+      Serial.println(motion);
+    }
 
+    colorWipe(greenishBlue, 30);
+    clearStrip();
+    delay(300);
+    buttonState = digitalRead(buttonPin);
+    if (buttonState == HIGH) {
+      sendDataToRaspi('x');
+    }
+  }
+  if (buttonState == HIGH) {
+    clearStrip();
+    getExpressionFromRaspiNShow();
+  }
+  delay(100);
+}
+
+char getDataFromGyro() {
+  char data = 's';
   xRead = analogRead(xPin);
   yRead = analogRead(yPin);
   zRead = analogRead(zPin);
@@ -66,37 +102,67 @@ void loop() {
   //if (zRead < 330) //Hand face up
   //else if (zRead > 400) //Hand face down
 
-  if (xRead > 320 && xRead < 380 && yRead > 290 && yRead < 370) //stop
-    motion = 's';
+  if (xRead > 320 && xRead < 380 && yRead > 310 && yRead < 380) //stop
+    data = 's';
 
   else {
-    //if (yRead < 290) //Back
-    if (yRead > 370) //Forward
-      motion = 'f';
+    if (yRead >= 380) //Forward
+      data = 'f';
+    else if (yRead <= 310)
+      data = 'u'; //Back, get expression from Squid
 
-    if (xRead < 320) //Left
-      motion = 'l';
-    else if (xRead > 380) //Right
-      motion = 'r';
+    if (xRead <= 320) //Left
+      data = 'l';
+    else if (xRead >= 380) //Right
+      data = 'r';
   }
-  bt.print(motion);
+  return data;
+}
+
+void sendDataToRaspi(char data) {
+  bt.print(data);
+}
+
+void getExpressionFromRaspiNShow() {
   if (bt.available()) {
     expression = bt.read();
     if (expression == 'h')
       //Serial.println("Happy");
-      fill(strip.Color(0, 255, 0));
+      fill(green);
     else if (expression == 's')
       //Serial.println("Sad");
-      fill(strip.Color(0, 0, 255));
+      fill(blue);
     else if (expression == 'a')
       //Serial.println("Angry");
-      fill(strip.Color(255, 0, 0));
+      fill(red);
     else if (expression == 'z')
-      Serial.println("Sleepy");
+      fill(cyan);
+    //Serial.println("Sleepy");
     //theaterChaseRainbow(50);
-
   }
-  delay(1000);
+}
+
+void fillOdd(uint32_t c) {
+  for (uint16_t i = 1; i < strip.numPixels(); i++) {
+    strip.setPixelColor(i, c);
+    strip.show();
+    i++;
+  }
+}
+
+void fillEven(uint32_t c) {
+  for (uint16_t i = 0; i < strip.numPixels(); i++) {
+    strip.setPixelColor(i, c);
+    strip.show();
+    i++;
+  }
+}
+
+void clearStrip() {
+  for (uint16_t i = 0; i < strip.numPixels(); i++) {
+    strip.setPixelColor(i, off);
+    strip.show();
+  }
 }
 
 void fill(uint32_t c) {
@@ -106,8 +172,17 @@ void fill(uint32_t c) {
   }
 }
 
-// Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait) {
+  for (uint16_t i = 0; i < strip.numPixels(); i++) {
+    if (i > 0)
+      strip.setPixelColor(i - 1, off);
+    strip.setPixelColor(i, c);
+    strip.show();
+    delay(wait);
+  }
+}
+// Fill the dots one after the other with a color
+void colorWipeClear(uint32_t c, uint8_t wait) {
   for (uint16_t i = 0; i < strip.numPixels(); i++) {
     strip.setPixelColor(i, c);
     strip.show();
