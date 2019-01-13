@@ -31,10 +31,8 @@ if not sock:
     sys.exit(1)
 
 while 1:
-    data = ''
-    data = str(sock.recv(1))
-    # print(data)
-    data = data[2:-1]
+    data = None
+    data = sock.recv(1).decode()
     if data =='f':
         print('Forward!')
     elif data == 'l':

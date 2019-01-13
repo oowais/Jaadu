@@ -20,13 +20,13 @@ class Atman(threading.Thread):
         self.setup()
 
     def setup(self):
-        mqtt_obj = Samsara(talk_queue=self.event_queue)
+        #mqtt_obj = Samsara(talk_queue=self.event_queue)
         walker_obj = Karma(listen_queue=self.walking_queue)
-        emotional_obj = Maya(listen_queue=self.emotional_queue, info_src=mqtt_obj)
+        #emotional_obj = Maya(listen_queue=self.emotional_queue, info_src=mqtt_obj)
         hand_ifc_obj = MargDarshan(talk_queue=self.event_queue)
-        mqtt_obj.start()
+        #mqtt_obj.start()
         walker_obj.start()
-        emotional_obj.start()
+        #emotional_obj.start()
         hand_ifc_obj.start()
 
     def pass_item_to_module(self, item):
