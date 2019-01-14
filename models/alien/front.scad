@@ -5,10 +5,10 @@ module eyes_setting(x, z) {
     y = 1;
     difference() {
         cube([x, 1, z]);
-        translate([-0.1, 0, z]) rotate([-elevation_deg, 0, 0]) top(x=x+0.2, z=10);
+        translate([-0.1, 0, z]) rotate([-lower_elevation_deg, 0, 0]) top(x=x+0.2, z=10);
         
         for (i = [2.5: 2.5: x-2.5]) {
-            translate([i, 0.3, z-1]) rotate([-elevation_deg, 0, 0]) cylinder(r=screw_r, h=2);
+            translate([i, 0.3, z-1]) rotate([-lower_elevation_deg, 0, 0]) cylinder(r=screw_r, h=2);
         }
         
         translate([(x/2) - 3.21 - 0.5, -0.1, (z/2) - (3.21/2)]) cube([3.21, 1.2, 3.21]);

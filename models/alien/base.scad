@@ -1,7 +1,6 @@
 include <globals.scad>
 
 module base(x, y, z) {
-    l_arms_base_d = 3.5;
     difference() {
         union() {
             cube([x, y, b_overall_z]);

@@ -29,29 +29,30 @@ module top_pieces(y, z=plexi_thickness) {
 }
 
 module all_plate_stack(num=0) {    
+    total_height = 5.1;
     if (num > 0) {
         difference() {
-            if (num <= 15) {
+            if (num <= 12) {
                 i = (num == 1) ? plexi_thickness : plexi_thickness + ((num - 1) * (plexi_thickness + filler));
-                translate([0, 0, i]) top_pieces(y=i/sin(elevation_deg));
+                translate([0, 0, i]) top_pieces(y=i/sin(lower_elevation_deg-1.5));
             }
-            else if ( num > 15) {
-                i = (num == 16) ? plexi_thickness : plexi_thickness + ((num - 16) * (plexi_thickness + filler));
-                translate([0, 0, (2*3.17)-i]) top_pieces(y=i/sin(elevation_deg));
+            else if ( num > 12) {
+                i = (num == 13) ? plexi_thickness : plexi_thickness + ((num - 13) * (plexi_thickness + filler));
+                translate([0, 0, (total_height)-i]) top_pieces(y=i/sin(elevation_deg+2.1));
             }
-            translate([total_x/2, total_y/2, 3.1]) circ_cut(r=4, t=0.5);
+            translate([total_x/2, total_y/2, (total_height/2)]) circ_cut(r=4, t=0.5);
         }
     } else {
         difference() {
             union() {
-                for (i = [plexi_thickness: plexi_thickness + filler: 3.17]) {
-                    translate([0, 0, i]) top_pieces(y=i/sin(elevation_deg));
+                for (i = [plexi_thickness: plexi_thickness + filler: (total_height/2)]) {
+                    translate([0, 0, i]) top_pieces(y=i/sin(lower_elevation_deg-1.5));
                 }
-                for (i = [plexi_thickness: (plexi_thickness + filler): 3.17]) {
-                    translate([0, 0, (2*3.17)-i]) top_pieces(y=i/sin(elevation_deg));
+                for (i = [plexi_thickness: (plexi_thickness + filler): (total_height/2)]) {
+                    translate([0, 0, (total_height)-i]) top_pieces(y=i/sin(elevation_deg+2.1));
                 }
             }
-            translate([total_x/2, total_y/2, 3.17]) circ_cut(r=4, t=0.5);
+            translate([total_x/2, total_y/2, (total_height/2)]) circ_cut(r=4, t=0.5);
         }
     }
 }
@@ -61,7 +62,9 @@ $fn=300;
 //scale([10, 10, 10]) top(x=total_x, y=top_total_y, z=plexi_thickness);
 // For the topmost top part
 //scale([10, 10, 10]) top(x=total_x, y=top_total_y, z=plexi_thickness, hole=false, screws=false);
-// Plate Stacks (num = 1 to 30)
+// Total plate stack
+//scale([10, 10, 10]) all_plate_stack(num=0); // num = 0
+// Plate Stacks (num = 1 to 24)
 //scale([10, 10, 10]) all_plate_stack(num=1); // num = 1
 //scale([10, 10, 10]) all_plate_stack(num=2); // num = 2
 //scale([10, 10, 10]) all_plate_stack(num=3); // num = 3
@@ -86,9 +89,3 @@ $fn=300;
 //scale([10, 10, 10]) all_plate_stack(num=22); // num = 22
 //scale([10, 10, 10]) all_plate_stack(num=23); // num = 23
 //scale([10, 10, 10]) all_plate_stack(num=24); // num = 24
-//scale([10, 10, 10]) all_plate_stack(num=25); // num = 25
-//scale([10, 10, 10]) all_plate_stack(num=26); // num = 26
-//scale([10, 10, 10]) all_plate_stack(num=27); // num = 27
-//scale([10, 10, 10]) all_plate_stack(num=28); // num = 28
-//scale([10, 10, 10]) all_plate_stack(num=29); // num = 29
-//scale([10, 10, 10]) all_plate_stack(num=30); // num = 30
