@@ -142,21 +142,7 @@ surprise_teeth[] = {
 
 
 void loop() {
-  matrix.setRotation(3);
-  matrix.clear();
-  matrix.drawBitmap(0, 0, smile, 8, 8, LED_ON);
-  matrix.writeDisplay();
-  delay(500);
-
-  matrix.clear();
-  matrix.drawBitmap(0, 0, confused, 8, 8, LED_ON);
-  matrix.writeDisplay();
-  delay(500);
-
-  matrix.clear();
-  matrix.drawBitmap(0, 0, sad, 8, 8, LED_ON);
-  matrix.writeDisplay();
-  delay(500);
+  //  delay(500);
 
   //  matrix.clear();
   //  matrix.drawBitmap(0, 0, surprise_teeth, 8, 8, LED_ON);
