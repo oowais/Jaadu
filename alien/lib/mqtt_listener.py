@@ -7,27 +7,57 @@ import threading
 import time
 
 from lib.globals import (EXTERNAL_BROKER_HOST, EXTERNAL_BROKER_PORT, LOGGER_TAG,
-                         AUTH_INFO_PATH, KEEP_STREAM_TIME)
+                         AUTH_INFO_PATH, KEEP_STREAM_TIME, MQTT_TOPIC_LISTING_PATH)
 from lib.secrets import token_hex
 
 
 class Samsara(threading.Thread):
     def __init__(self, talk_queue):
         super(Samsara, self).__init__(name=type(self).__name__)
+        self.module_up = False
         self.q = talk_queue
         self.logger = logging.getLogger(LOGGER_TAG)
         self.client = mqtt.Client(userdata={})
-        self.client.connect(host=EXTERNAL_BROKER_HOST, port=EXTERNAL_BROKER_PORT)
         self.auth_topic_user = {} # hash : {"time", "userid", "secret", "start"}
-        self.subscribe_topics()
+        self.key_topic_mappings = self.set_topic_interest()
+        self.all_saved_info = {}
 
+    def module_setup(self):
+        while not self.module_up:
+            try:
+                self.client.connect(host=EXTERNAL_BROKER_HOST, port=EXTERNAL_BROKER_PORT)
+            except TimeoutError:
+                self.module_up = False
+                self.logger.warning("Could not connect to Broker, MQTT module not up ...")
+            else:
+                self.module_up = True
+                self.subscribe_topics()
+            time.sleep(1)
+
+    def set_topic_interest(self):
+        t_mappings = {}
+        if os.path.exists(MQTT_TOPIC_LISTING_PATH):
+            try:
+                with open(MQTT_TOPIC_LISTING_PATH, "r") as fr:
+                    mappings = json.load(fr)
+            except json.decoder.JSONDecodeError:
+                self.logger.error("JSON MQTT topics Mapping file corrupted ...")
+            else:
+                for item in mappings:
+                    try:
+                        topic, key = item["topic"], item["key"]
+                    except KeyError:
+                        continue
+                    t_mappings[topic] = key
+        return t_mappings
 
     def subscribe_topics(self):
-        self.client.message_callback_add(sub="info/#", callback=self.info_messages) # TBD
         self.client.message_callback_add(sub="atman/backdoor/auth", callback=self.handle_backdoor_auth_request)
         self.client.subscribe("atman/backdoor/auth")
         self.client.subscribe("atman/backdoor/server/#")
-
+        for topic in self.key_topic_mappings.keys():
+            self.client.message_callback_add(sub=topic, callback=self.topic_messages)
+            self.client.subscribe(topic)
 
     def generate_new_topic_code(self, secret):
         new_hash = None
@@ -39,7 +69,6 @@ class Samsara(threading.Thread):
             new_hash = hashlib.sha256("{}{}".format(secret, new_code).encode()).hexdigest()
         new_topic = "atman/backdoor/server/{}".format(new_hash)
         return new_hash, new_topic, new_code
-
 
     def handle_backdoor_auth_request(self, client, userdata, msg):
         time_now = time.time()
@@ -81,7 +110,6 @@ class Samsara(threading.Thread):
             self.logger.debug("[AUTH] User {} not found among authorized users list ...".format(userid))
             self.client.publish(topic="atman/backdoor/{}".format(userid), payload=json.dumps({"status" : "deny"}))
 
-
     def handle_commands(self, client, userdata, msg):
         payload = json.loads(msg.payload.decode("utf-8"))
         userid, code, command = payload.get("userid", None), payload.get("code", None), payload.get("command", None)
@@ -116,11 +144,16 @@ class Samsara(threading.Thread):
             self.client.message_callback_add(sub=new_topic, callback=self.handle_commands)
         self.client.publish(topic=client_topic, payload=json.dumps(payload))
 
-
-    def info_messages(self, client, userdata, msg):
+    def topic_messages(self, client, userdata, msg):
         self.logger.debug("Received message {} from topic {}".format(msg.topic, msg.payload))
+        internal_key = self.key_topic_mappings.get(msg.topic, None)
+        if internal_key:
+            self.all_saved_info[internal_key] = msg.payload.decode()
 
+    def get_latest_value(self, key):
+        return self.all_saved_info.get(key, None)
 
     def run(self):
+        self.module_setup()
         self.logger.info("Starting off External MQTT connector ...")
         self.client.loop_forever()

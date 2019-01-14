@@ -11,30 +11,32 @@ class MargDarshan(threading.Thread):
         super(MargDarshan, self).__init__(name=type(self).__name__)
         self.logger = logging.getLogger()
         self.q = talk_queue
-        self.hand_blue_sock = None
-        self.connect()
-
-    def connect(self):
+        self.module_up = False
         self.hand_blue_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-        try:
-            self.hand_blue_sock.connect((HAND_BLUETOOTH_MAC, HAND_BLUETOOTH_PORT))
-        except IOError:
-            self.logger.error('Unable to connect to {}'.format(HAND_BLUETOOTH_MAC))
-            self.hand_blue_sock = None
-        else:
-            self.logger.info('Connected to Hand Bluetooth Module..!')
+
+    def module_setup(self):
+        while not self.module_up:
+            try:
+                self.hand_blue_sock.connect((HAND_BLUETOOTH_MAC, HAND_BLUETOOTH_PORT))
+            except IOError:
+                self.logger.error('Unable to connect to {}'.format(HAND_BLUETOOTH_MAC))
+                self.module_up = False
+            else:
+                self.logger.info('Connected to Hand Bluetooth Module..!')
+                self.module_up = True
+            time.sleep(1)
 
     def run(self):
-        self.logger.info("Starting off Bluetooth instruction receiver ...")
+        self.logger.info("Starting off Bluetooth instruction receiver thread ...")
         while True:
+            if not self.module_up:
+                self.module_setup()
             try:
-                if self.hand_blue_sock:
-                    data = self.hand_blue_sock.recv(1).decode()
-                else:
-                    raise bluetooth.btcommon.BluetoothError
+                data = self.hand_blue_sock.recv(1).decode()
             except bluetooth.btcommon.BluetoothError:
-                self.hand_blue_sock = None
-                self.connect()
+                self.module_up = False
+                continue
+
             if data == "f":
                 self.q.put("move forward 1")
             elif data == "r":
@@ -47,4 +49,3 @@ class MargDarshan(threading.Thread):
                 self.q.put("move clear")
             else:
                 self.logger.warning("Not able to recognize character.. Ignoring..")
-                

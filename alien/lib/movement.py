@@ -83,8 +83,6 @@ class Karma(threading.Thread):
                     self.turn_right(n=times)
                 elif command == "left":
                     self.turn_left(n=times)
-                #elif command == "clear":
-                #    self.clear()
                 else:
                     self.logger.error("Command {} received doesn't match with "
                             "pre-loaded commands, ignoring...".format(command))
