@@ -26,13 +26,13 @@ class Samsara(threading.Thread):
         while not self.module_up:
             try:
                 self.client.connect(host=EXTERNAL_BROKER_HOST, port=EXTERNAL_BROKER_PORT)
-            except TimeoutError:
+            except (TimeoutError, ConnectionRefusedError):
                 self.module_up = False
                 self.logger.warning("Could not connect to Broker, MQTT module not up ...")
+                time.sleep(1)
             else:
                 self.module_up = True
                 self.subscribe_topics()
-            time.sleep(1)
 
     def set_topic_interest(self):
         t_mappings = {}

@@ -14,6 +14,7 @@ KEEP_STREAM_TIME = 120
 # Topics to listen to
 MQTT_TOPIC_LISTING_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "mqtt_topic_mappings.json")
 
+# Movement
 # GPIO Setup
 MIN_DUTY = 3
 MAX_DUTY = 11

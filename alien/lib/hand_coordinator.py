@@ -19,12 +19,12 @@ class MargDarshan(threading.Thread):
             try:
                 self.hand_blue_sock.connect((HAND_BLUETOOTH_MAC, HAND_BLUETOOTH_PORT))
             except IOError:
-                self.logger.error('Unable to connect to {}'.format(HAND_BLUETOOTH_MAC))
+                self.logger.error('Unable to connect to Hand Bluetooth, Module not up ...')
                 self.module_up = False
+                time.sleep(1)
             else:
                 self.logger.info('Connected to Hand Bluetooth Module..!')
                 self.module_up = True
-            time.sleep(1)
 
     def run(self):
         self.logger.info("Starting off Bluetooth instruction receiver thread ...")
@@ -38,14 +38,14 @@ class MargDarshan(threading.Thread):
                 continue
 
             if data == "f":
-                self.q.put("move forward 1")
+                self.q.put("hand forward")
             elif data == "r":
-                self.q.put("move right 1")
+                self.q.put("hand right")
             elif data == "l":
-                self.q.put("move left 1")
+                self.q.put("hand left")
             elif data == "u":
-                self.q.put("move up 1")
+                self.q.put("hand look_up")
             elif data == "x":
-                self.q.put("move clear")
+                self.q.put("hand clear_and_emotify")
             else:
                 self.logger.warning("Not able to recognize character.. Ignoring..")
