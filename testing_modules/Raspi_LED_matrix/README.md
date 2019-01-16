@@ -18,7 +18,7 @@ Test if spi interface
 
 
 ## Using Adafruit library to use Adafruit backpack
-[Github Link](https://github.com/adafruit/Adafruit_Python_LED_Backpack) 
+[Github Link](https://github.com/adafruit/Adafruit_Python_LED_Backpack)
 ```
 sudo apt-get update
 sudo apt-get install -y git build-essential python3-dev python3-smbus python-imaging python3-pip python3-pil
@@ -29,7 +29,6 @@ cd Adafruit_Python_LED_Backpack
 sudo python3 setup.py install
 ```
 Then run eye.py using  
-supo python3 eye.py
+sudo python3 eye.py
 
 > More eye expression to be added.
-

@@ -9,7 +9,7 @@ from lib.globals import LOGGER_TAG, HAND_BLUETOOTH_MAC, HAND_BLUETOOTH_PORT
 class MargDarshan(threading.Thread):
     def __init__(self, talk_queue):
         super(MargDarshan, self).__init__(name=type(self).__name__)
-        self.logger = logging.getLogger()
+        self.logger = logging.getLogger(LOGGER_TAG)
         self.q = talk_queue
         self.module_up = False
         self.hand_blue_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)

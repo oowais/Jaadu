@@ -1,2 +1,7 @@
+# GPIO pins handling
 RPi.GPIO
+# MQTT communication
 paho-mqtt
+# LED Strips
+rpi_ws281x
+adafruit-circuitpython-neopixel
