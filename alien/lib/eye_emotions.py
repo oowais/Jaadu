@@ -1,27 +1,14 @@
-import threading
-import time
 from Adafruit_LED_Backpack import Matrix8x8
 
+from lib.display_emotions import EmotionsDisplayer
 import lib.emotions_library
-from lib.globals import LOGGER_TAG
 
 
-class EyeDisplay(threading.Thread):
+class EyeDisplay(EmotionsDisplayer):
     def __init__(self):
         super(EyeDisplay, self).__init__(name=type(self).__name__)
-        self.logger = logging.getLogger(LOGGER_TAG)
-        self.execute_emotion = None
-        self.current_command = None
         self.left_eye = None
         self.right_eye = None
-        self.module_up = False
-        self.command_mappings = {"startup" : self.startup,
-                                 "normal" : self.normal,
-                                 "happy" : self.happy,
-                                 "sad" : self.sad,
-                                 "angry" : self.angry,
-                                 "sleepy" : self.sleepy,
-                                 "surprised" : self.surprised}
 
     def module_setup(self):
         if not self.module_up:
@@ -31,27 +18,7 @@ class EyeDisplay(threading.Thread):
             self.right_eye.begin()
             self.module_up = True
             self.set_emotion_command(command="startup")
-        self.logger.info("Successfully setup the Eyes Module to display emotions ...")
-
-    def set_emotion_command(self, command):
-        if command in self.command_mappings.keys():
-            self.execute_emotion = command
-            self.logger.debug("Changing to emotion : {}".format(command))
-
-    def execute_emotion(self, commands_loop, loop=True, max_time=120):
-        time_now = time.time()
-        time_to_end = time_now + max_time
-        while time_now < time_to_end:
-            for item in commands_loop:
-                if self.execute_emotion == self.current_command:
-                    eval(item)
-                else:
-                    return
-            if not loop:
-                break
-            time_now = time.time()
-        self.set_emotion_command(command="sleepy") # Default state
-        self.logger.debug("Going back to sleepy mode, the default state ...")
+            self.logger.info("Successfully setup the Eyes Module to display emotions ...")
 
     def startup(self):
         startup_loop = [
@@ -90,7 +57,7 @@ class EyeDisplay(threading.Thread):
             "self.clear_buffer()",
             "self.set_pixels(lib.emotions_library.LEFT_NORMAL_2, lib.emotions_library.RIGHT_NORMAL_2)"
         ]
-        self.execute_emotion(commands_loop=normal_loop)
+        self.execute_emotion(commands_loop=normal_loop, next_emotion="sleepy")
 
     def happy(self):
         happy_loop = [
@@ -124,7 +91,7 @@ class EyeDisplay(threading.Thread):
             "self.clear_buffer()",
             "self.set_pixels(lib.emotions_library.LEFT_SLEEPY, lib.emotions_library.RIGHT_SLEEPY)"
         ]
-        self.execute_emotion(commands_loop=sleepy_loop)
+        self.execute_emotion(commands_loop=sleepy_loop, next_emotion="sleepy")
 
     def surprised(self):
         surprised_loop = [
@@ -157,11 +124,3 @@ class EyeDisplay(threading.Thread):
     def write_buffer(self):
         self.left_eye.write_display()
         self.right_eye.write_display()
-
-    def run(self):
-        while True:
-            if not self.module_up:
-                self.module_setup()
-            else:
-                self.current_command = self.execute_emotion
-                self.command_mappings.get(self.current_command)()

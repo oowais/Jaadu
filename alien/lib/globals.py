@@ -26,3 +26,10 @@ WALKING_PINS = [("left_leg", 2), ("left_foot", 3), ("right_leg", 4), ("right_foo
 # Hand Module
 HAND_BLUETOOTH_MAC = "98:D3:31:F5:B9:E7"
 HAND_BLUETOOTH_PORT = 1
+
+# Eyes and Brain Modules
+SHOW_EMOTION_FOR_TIME = 120
+# Eyes specific configuration
+# Brain specific configuration
+NUM_PIXELS_USED = 30
+PIXEL_BRIGHTNESS = 0.2
