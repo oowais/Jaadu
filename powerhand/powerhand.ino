@@ -17,11 +17,11 @@
 
 /*
   Wires:
-  Red: A0/VCC
-  Grey: A4/GND
-  Yellow: X_OUT A1
+  Red: A4/VCC
+  Grey: A0/GND
+  Yellow: X_OUT A3
   Purple: Y_OUT A2
-  Orange: Z_OUT A3
+  Orange: Z_OUT A1
 
 */
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(10, PIN, NEO_GRB + NEO_KHZ800);
@@ -30,11 +30,11 @@ char expression;
 char motion;
 
 const int buttonPin = 9;
-const int groundpin = A4;
-const int powerpin = A0;
-const int xPin = A1;
+const int groundpin = A0;
+const int powerpin = A4;
+const int zPin = A1;
 const int yPin = A2;
-const int zPin = A3;
+const int xPin = A3;
 
 const uint32_t lemon = strip.Color(255, 165, 0); //surprise
 const uint32_t red = strip.Color(255, 0, 0); //angry
