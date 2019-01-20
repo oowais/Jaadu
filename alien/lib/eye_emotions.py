@@ -12,8 +12,10 @@ class EyeDisplay(EmotionsDisplayer):
 
     def module_setup(self):
         if not self.module_up:
-            self.left_eye = Matrix8x8.Matrix8x8()
-            self.right_eye = Matrix8x8.Matrix8x8()
+            # exchange busnum to switch eyes :D!
+            # Check readme file to enable busnum 3
+            self.left_eye = Matrix8x8.Matrix8x8(address=0x70, busnum=1)
+            self.right_eye = Matrix8x8.Matrix8x8(address=0x70, busnum=3)
             self.left_eye.begin()
             self.right_eye.begin()
             self.module_up = True
