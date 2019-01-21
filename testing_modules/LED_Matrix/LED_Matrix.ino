@@ -149,15 +149,11 @@ void loop() {
   //  matrix.writeDisplay();  // write the changes we just made to the display
   //  delay(500);
 
-  //  matrix.clear();
-  //  matrix.drawLine(0, 0, 7, 7, LED_ON);
-  //  matrix.writeDisplay();  // write the changes we just made to the display
-  //  delay(500);
   //
-  //  matrix.clear();
+    matrix.clear();
   //  matrix.drawRect(0,0, 8,8, LED_ON);
-  //  matrix.fillRect(2,2, 4,4, LED_ON);
-  //  matrix.writeDisplay();  // write the changes we just made to the display
+    matrix.fillRect(0,0, 8,8, LED_ON);
+    matrix.writeDisplay();  // write the changes we just made to the display
   //  delay(500);
   //
   //  matrix.clear();
