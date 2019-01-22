@@ -11,13 +11,14 @@ class EmotionsDisplayer(threading.Thread):
         self.execute_command = None
         self.current_command = None
         self.module_up = False
-        self.command_mappings = {"startup" : self.startup,
-                                 "normal" : self.normal,
-                                 "happy" : self.happy,
-                                 "sad" : self.sad,
-                                 "angry" : self.angry,
-                                 "sleepy" : self.sleepy,
-                                 "surprised" : self.surprised}
+        self.command_mappings = {"startup": self.startup,
+                                 "normal": self.normal,
+                                 "happy": self.happy,
+                                 "sad": self.sad,
+                                 "angry": self.angry,
+                                 "sleepy": self.sleepy,
+                                 "surprised": self.surprised,
+                                 "lowpower": self.low_power}
 
     def set_emotion_command(self, command):
         if command in self.command_mappings.keys():
@@ -71,4 +72,7 @@ class EmotionsDisplayer(threading.Thread):
         pass
 
     def surprised(self):
+        pass
+
+    def low_power(self):
         pass

@@ -149,49 +149,11 @@ int l_surprised2[26][2] = {{0, 3}, {0, 4}, {0, 5}, {0, 6},
 void loop() {
   // put your main code here, to run repeatedly
   normal();
-  normal();
-  normal();
-  normal();
-  normal();
-  normal();
-  normal();
-  
   happy();
-  happy();
-  happy();
-  happy();
-  happy();
-  happy();
-  happy();
-  
   angry();
-  angry();
-  angry();
-  angry();
-  angry();
-  angry();
-  angry();
-
   sleepy();
-  sleepy();
-  sleepy();
-  sleepy();
-  sleepy();
-
   sad();
-  sad();
-  sad();
-  sad();
-  sad();
-  sad();
-  
   surprised();
-  surprised();
-  surprised();
-  surprised();
-  surprised();
-  surprised();
-  
 }
 
 void surprised() {

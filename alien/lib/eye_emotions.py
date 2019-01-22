@@ -105,6 +105,16 @@ class EyeDisplay(EmotionsDisplayer):
         ]
         self.execute_emotion(commands_loop=surprised_loop)
 
+    def low_power(self):
+        low_power_loop = [
+            "self.clear_buffer()",
+            "self.set_pixels(lib.emotions_library.LEFT_LOW_POWER, lib.emotions_library.RIGHT_LOW_POWER)",
+            "time.sleep(0.5)",
+            "self.clear_buffer()",
+            "self.set_pixels(lib.emotions_library.LEFT_LOW_POWER_2, lib.emotions_library.RIGHT_LOW_POWER_2)"
+        ]
+        self.execute_emotion(commands_loop=low_power_loop)
+
     def clear_pixels(self, l_arr, r_arr):
         for a in l_arr:
             self.left_eye.set_pixel(a[0], a[1], 0)
