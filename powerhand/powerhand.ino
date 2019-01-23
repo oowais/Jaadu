@@ -4,7 +4,7 @@
 #include <avr/power.h>
 #endif
 
-#define PIN 4
+#define PIN 10
 /*
   The circuit:
   - analog 7: z-axis
@@ -24,7 +24,7 @@
   Orange: Z_OUT A1
 
 */
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(10, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(18, PIN, NEO_GRB + NEO_KHZ800);
 SoftwareSerial bt (5, 6);
 char expression;
 char motion;
