@@ -3,7 +3,7 @@ module middle_part() {
         linear_extrude(0.2) circle(r=7);
         translate([-15/2, -7, -0.5]) cube([15, 7, 1]);
         rotate([0, 0, -70]) translate([-15/2, -7, -0.5]) cube([15, 7, 1]);
-        translate([1.1, -0.1, -0.1]) cube([0.2, 2.4, 1]);
+        translate([1.1, -0.1, -0.1]) cube([0.4, 2.4, 1]);
         translate([1, -0.1, -0.1]) cube([0.8, 0.6, 1]);
         difference() {
             sphere(r=6.5);
