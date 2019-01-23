@@ -78,7 +78,12 @@ void loop() {
       Serial.println(motion);
     }
 
-    colorWipe(greenishBlue, 30);
+    if (motion == 'l')
+      leftLed(greenishBlue, 50);
+    else if (motion == 'r')
+      rightLed(greenishBlue, 50);
+    else if (motion == 'f' or motion =='u')
+      blinkLed(greenishBlue, 100);
     clearStrip();
     delay(300);
     buttonState = digitalRead(buttonPin);
@@ -87,10 +92,10 @@ void loop() {
     }
   }
   if (buttonState == HIGH) {
-    clearStrip();
-    getExpressionFromRaspiNShow();
+    rainbow(30);
+    //getExpressionFromRaspiNShow();
   }
-  delay(100);
+  delay(50);
 }
 
 char getDataFromGyro() {
@@ -121,6 +126,193 @@ char getDataFromGyro() {
 
 void sendDataToRaspi(char data) {
   bt.print(data);
+}
+
+void blinkLed(uint32_t c, uint8_t wait) {
+  for (uint16_t i = 0; i < strip.numPixels(); i++) {
+    strip.setPixelColor(i, c);
+  }
+  strip.show();
+  delay(wait);
+
+  for (uint16_t i = 0; i < strip.numPixels(); i++) {
+    strip.setPixelColor(i, off);
+  }
+  strip.show();
+  delay(wait);
+}
+
+void leftLed(uint32_t c, uint8_t wait) {
+  strip.setPixelColor(9, c);
+  strip.setPixelColor(8, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(9, off);
+  strip.setPixelColor(8, off);
+  strip.setPixelColor(10, c);
+  strip.setPixelColor(7, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(10, off);
+  strip.setPixelColor(7, off);
+  strip.setPixelColor(11, c);
+  strip.setPixelColor(6, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(11, off);
+  strip.setPixelColor(6, off);
+  strip.setPixelColor(12, c);
+  strip.setPixelColor(5, c);
+  strip.setPixelColor(0, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(12, off);
+  strip.setPixelColor(5, off);
+  strip.setPixelColor(0, off);
+  strip.setPixelColor(13, c);
+  strip.setPixelColor(4, c);
+  strip.setPixelColor(1, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(13, off);
+  strip.setPixelColor(4, off);
+  strip.setPixelColor(1, off);
+  strip.setPixelColor(14, c);
+  strip.setPixelColor(3, c);
+  strip.setPixelColor(2, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(14, off);
+  strip.setPixelColor(3, off);
+  strip.setPixelColor(2, off);
+  strip.setPixelColor(15, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(15, off);
+  strip.setPixelColor(16, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(16, off);
+  strip.setPixelColor(17, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(16, off);
+  strip.setPixelColor(17, c);
+  strip.show();
+  delay(wait);
+  strip.setPixelColor(17, off);
+  strip.show();
+}
+
+void rightLed(uint32_t c, uint8_t wait) {
+  strip.setPixelColor(17, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(17, off);
+  strip.setPixelColor(16, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(16, off);
+  strip.setPixelColor(15, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(15, off);
+  strip.setPixelColor(14, c);
+  strip.setPixelColor(3, c);
+  strip.setPixelColor(2, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(14, off);
+  strip.setPixelColor(3, off);
+  strip.setPixelColor(2, off);
+  strip.setPixelColor(13, c);
+  strip.setPixelColor(4, c);
+  strip.setPixelColor(1, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(13, off);
+  strip.setPixelColor(4, off);
+  strip.setPixelColor(1, off);
+  strip.setPixelColor(12, c);
+  strip.setPixelColor(5, c);
+  strip.setPixelColor(0, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(12, off);
+  strip.setPixelColor(5, off);
+  strip.setPixelColor(0, off);
+  strip.setPixelColor(11, c);
+  strip.setPixelColor(6, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(11, off);
+  strip.setPixelColor(6, off);
+  strip.setPixelColor(10, c);
+  strip.setPixelColor(7, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(10, off);
+  strip.setPixelColor(7, off);
+  strip.setPixelColor(9, c);
+  strip.setPixelColor(8, c);
+  strip.show();
+  delay(wait);
+
+  strip.setPixelColor(9, off);
+  strip.setPixelColor(8, off);
+  strip.show();
+}
+
+void leftLedTop(uint32_t c, uint8_t wait) {
+  for (uint16_t i = 9; i < 18; i++) {
+    if (i > 9)
+      strip.setPixelColor(i - 1, off);
+    strip.setPixelColor(i, c);
+    strip.show();
+    delay(wait);
+  }
+}
+
+void rightLedTop(uint32_t c, uint8_t wait) {
+  for (uint16_t i = 17; i > 8; i--) {
+    if (i < 17)
+      strip.setPixelColor(i + 1, off);
+    strip.setPixelColor(i, c);
+    strip.show();
+    delay(wait);
+  }
+}
+
+void rainbow(uint8_t wait) {
+  uint16_t i, j;
+
+  for (j = 0; j < 256; j++) {
+    for (i = 0; i < strip.numPixels(); i++) {
+      strip.setPixelColor(i, Wheel((i + j) & 255));
+      buttonState = digitalRead(buttonPin);
+      if (buttonState == LOW)
+        return;
+    }
+    strip.show();
+    delay(wait);
+  }
 }
 
 void getExpressionFromRaspiNShow() {
@@ -169,91 +361,6 @@ void fill(uint32_t c) {
   for (uint16_t i = 0; i < strip.numPixels(); i++) {
     strip.setPixelColor(i, c);
     strip.show();
-  }
-}
-
-void colorWipe(uint32_t c, uint8_t wait) {
-  for (uint16_t i = 0; i < strip.numPixels(); i++) {
-    if (i > 0)
-      strip.setPixelColor(i - 1, off);
-    strip.setPixelColor(i, c);
-    strip.show();
-    delay(wait);
-  }
-}
-// Fill the dots one after the other with a color
-void colorWipeClear(uint32_t c, uint8_t wait) {
-  for (uint16_t i = 0; i < strip.numPixels(); i++) {
-    strip.setPixelColor(i, c);
-    strip.show();
-    delay(wait);
-  }
-  //undo the colors
-  for (uint16_t i = strip.numPixels(); i > 0; i--) {
-    strip.setPixelColor(i, strip.Color(0, 0, 0));
-    strip.show();
-    delay(wait);
-  }
-}
-
-void rainbow(uint8_t wait) {
-  uint16_t i, j;
-
-  for (j = 0; j < 256; j++) {
-    for (i = 0; i < strip.numPixels(); i++) {
-      strip.setPixelColor(i, Wheel((i + j) & 255));
-    }
-    strip.show();
-    delay(wait);
-  }
-}
-
-// Slightly different, this makes the rainbow equally distributed throughout
-void rainbowCycle(uint8_t wait) {
-  uint16_t i, j;
-
-  for (j = 0; j < 256 * 5; j++) { // 5 cycles of all colors on wheel
-    for (i = 0; i < strip.numPixels(); i++) {
-      strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + j) & 255));
-    }
-    strip.show();
-    delay(wait);
-  }
-}
-
-//Theatre-style crawling lights.
-void theaterChase(uint32_t c, uint8_t wait) {
-  for (int j = 0; j < 10; j++) { //do 10 cycles of chasing
-    for (int q = 0; q < 3; q++) {
-      for (uint16_t i = 0; i < strip.numPixels(); i = i + 3) {
-        strip.setPixelColor(i + q, c);  //turn every third pixel on
-      }
-      strip.show();
-
-      delay(wait);
-
-      for (uint16_t i = 0; i < strip.numPixels(); i = i + 3) {
-        strip.setPixelColor(i + q, 0);      //turn every third pixel off
-      }
-    }
-  }
-}
-
-//Theatre-style crawling lights with rainbow effect
-void theaterChaseRainbow(uint8_t wait) {
-  for (int j = 0; j < 256; j++) {   // cycle all 256 colors in the wheel
-    for (int q = 0; q < 3; q++) {
-      for (uint16_t i = 0; i < strip.numPixels(); i = i + 3) {
-        strip.setPixelColor(i + q, Wheel( (i + j) % 255)); //turn every third pixel on
-      }
-      strip.show();
-
-      delay(wait);
-
-      for (uint16_t i = 0; i < strip.numPixels(); i = i + 3) {
-        strip.setPixelColor(i + q, 0);      //turn every third pixel off
-      }
-    }
   }
 }
 
