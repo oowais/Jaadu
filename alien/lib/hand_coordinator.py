@@ -18,9 +18,10 @@ class MargDarshan(threading.Thread):
         while not self.module_up:
             try:
                 self.hand_blue_sock.connect((HAND_BLUETOOTH_MAC, HAND_BLUETOOTH_PORT))
-            except IOError:
+            except (IOError, bluetooth.btcommon.BluetoothError):
                 self.logger.error('Unable to connect to Hand Bluetooth, Module not up ...')
                 self.module_up = False
+                self.hand_blue_sock.close()
                 time.sleep(1)
             else:
                 self.logger.info('Connected to Hand Bluetooth Module..!')
@@ -35,6 +36,7 @@ class MargDarshan(threading.Thread):
                 data = self.hand_blue_sock.recv(1).decode()
             except bluetooth.btcommon.BluetoothError:
                 self.module_up = False
+                self.hand_blue_sock.close()
                 continue
 
             if data == "f":

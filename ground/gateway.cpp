@@ -1,4 +1,4 @@
-#include "Gateway.h"
+#include "gateway.h"
 
 Gateway::Gateway(byte echoPin, byte trigPin, byte ledStripPin, byte numLED, Gateway **activatedGateway)
 {

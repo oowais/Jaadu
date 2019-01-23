@@ -1,6 +1,6 @@
 #include <Arduino_FreeRTOS.h>
 #include <SoftwareSerial.h>
-#include "Gateway.h"
+#include "gateway.h"
 
 // FreeRTOS tasks
 void TaskUltraSonicSensorOneRead(void *pvParameters);
@@ -25,16 +25,15 @@ byte tx_conn = 6;
 // Gateways to Monitor
 Gateway crocodile;
 Gateway plant;
-
 Gateway *activatedGateway;
+
+SoftwareSerial neelaDanth(rx_conn, tx_conn);
 
 void setup() {
   Serial.begin(9600);
-
-  activatedGateway = NULL;
-
-  SoftwareSerial neelaDanth(rx_conn, tx_conn);
   neelaDanth.begin(9600);
+  
+  activatedGateway = NULL;
 
   crocodile = Gateway(crocodile_us_echo, crocodile_us_trigger, crocodile_led_din, 2, &activatedGateway);
   plant = Gateway(plant_us_echo, plant_us_trigger, plant_led_din, 2, &activatedGateway);
@@ -97,9 +96,9 @@ void TaskBluetoothComm( void *pvParameters __attribute__((unused)) )
 
     } else if (lastWeKnow != activatedGateway) {
       lastWeKnow = activatedGateway;
-      if (&crocodile == *activatedGateway)
+      if (&crocodile == activatedGateway)
         neelaDanth.print("c");
-      else if (&plant == *activatedGateway)
+      else if (&plant == activatedGateway)
         neelaDanth.print("p");
     }
     vTaskDelay(1);
