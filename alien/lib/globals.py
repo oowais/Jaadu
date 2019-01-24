@@ -21,7 +21,7 @@ MAX_DUTY = 11
 CENTER = (MAX_DUTY + MIN_DUTY) / 2
 CHANNEL_FREQ = 50
 # Movement Setup
-WALKING_PINS = [("left_leg", 2), ("left_foot", 3), ("right_leg", 4), ("right_foot", 17)]
+WALKING_PINS = [("left_leg", 16), ("left_foot", 20), ("right_leg", 25), ("right_foot", 26)]
 
 # Hand Module
 HAND_BLUETOOTH_MAC = "98:D3:31:F5:B9:E7"
