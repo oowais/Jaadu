@@ -44,12 +44,12 @@ void servoDetachAll() {
 /*
   Left foot             Right foot
   up-       10          up-       180
-  straight- 50          straight- 130
-  down-     150         down-     30
+  straight- 45          straight- 130
+  down-     120         down-     40
 
   Left leg              Right leg
-  extreme-  180         extreme-  90
-  centre-   100         centre-   180
+  extreme-  150         extreme-  90
+  centre-   60          centre-   180
 */
 
 void movePart(sControl *which, byte angleDesired = 0, boolean detachAfter = false,
