@@ -19,7 +19,7 @@ class Karma(threading.Thread):
         self.gpio_control.cleanup()
 
     def hello(self):
-        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(50)),
+        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(45)),
                                        ("right_foot", GPIOController.cnvt_angle_to_dc(180))])
         for i in range(2):
             self.gpio_control.control_pins(control_values=[("right_leg", GPIOController.cnvt_angle_to_dc(150))], delay=0.2)
@@ -27,43 +27,43 @@ class Karma(threading.Thread):
         self.default_position()
 
     def forward(self):
-        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(150)),
-                                       ("right_foot", GPIOController.cnvt_angle_to_dc(30))], delay=0.3)
-        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(180)),
+        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(120)),
+                                       ("right_foot", GPIOController.cnvt_angle_to_dc(40))], delay=0.3)
+        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(150)),
                                        ("right_leg", GPIOController.cnvt_angle_to_dc(90))], delay=0.3)
         self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(10)),
                                        ("right_foot", GPIOController.cnvt_angle_to_dc(180))], delay=0.3)
-        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(100)),
+        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(60)),
                                        ("right_leg", GPIOController.cnvt_angle_to_dc(180))], delay=0.3)
         self.default_position()
 
     def turn_right(self):
-        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(50)),
-                                       ("right_foot", GPIOController.cnvt_angle_to_dc(130))], delay=0.3)
-        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(100)),
+        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(10)),
+                                       ("right_foot", GPIOController.cnvt_angle_to_dc(180))], delay=0.3)
+        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(60)),
                                        ("right_leg", GPIOController.cnvt_angle_to_dc(90))], delay=0.3)
-        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(150)),
-                                       ("right_foot", GPIOController.cnvt_angle_to_dc(30))], delay=0.3)
-        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(180)),
+        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(120)),
+                                       ("right_foot", GPIOController.cnvt_angle_to_dc(40))], delay=0.3)
+        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(150)),
                                        ("right_leg", GPIOController.cnvt_angle_to_dc(180))], delay=0.3)
         self.default_position()
 
     def turn_left(self):
-        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(50)),
+        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(45)),
                                        ("right_foot", GPIOController.cnvt_angle_to_dc(130))], delay=0.3)
-        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(180)),
+        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(150)),
                                        ("right_leg", GPIOController.cnvt_angle_to_dc(180))], delay=0.3)
-        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(150)),
-                                       ("right_foot", GPIOController.cnvt_angle_to_dc(30))], delay=0.3)
-        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(100)),
-                                       ("right_leg", GPIOController.cnvt_angle_to_dc(90))], delay=0.3)
+        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(120)),
+                                       ("right_foot", GPIOController.cnvt_angle_to_dc(40))], delay=0.3)
+        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(60)),
+                                       ("right_leg", GPIOController.cnvt_angle_to_dc(180))], delay=0.3)
         self.default_position()
 
     def default_position(self):
-        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(100)),
+        self.gpio_control.control_pins(control_values=[("left_leg", GPIOController.cnvt_angle_to_dc(60)),
                                        ("right_leg", GPIOController.cnvt_angle_to_dc(180))], delay=0.3)
-        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(150)),
-                                       ("right_foot", GPIOController.cnvt_angle_to_dc(30))], delay=0.3)
+        self.gpio_control.control_pins(control_values=[("left_foot", GPIOController.cnvt_angle_to_dc(120)),
+                                       ("right_foot", GPIOController.cnvt_angle_to_dc(40))], delay=0.3)
 
     def set_walking_command(self, command):
         if command in ["hello", "forward", "right", "left", "stop"]:
