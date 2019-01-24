@@ -36,7 +36,7 @@ GROUND_BLUETOOTH_RECV_PORT = 2
 # Eyes and Brain Modules
 SHOW_EMOTION_FOR_TIME = 120
 # Eyes specific configuration
-EYE_I2C_ADDRESS = None
+EYE_I2C_ADDRESS = 0x70
 # Brain specific configuration
 NUM_PIXELS_USED = 30
 PIXEL_BRIGHTNESS = 0.2

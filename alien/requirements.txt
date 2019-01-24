@@ -4,6 +4,9 @@ RPi.GPIO
 # MQTT communication
 paho-mqtt
 
+# Bluetooth
+pybluez
+
 # LED Strips
 rpi_ws281x
 adafruit-circuitpython-neopixel

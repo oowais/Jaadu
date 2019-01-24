@@ -1,12 +1,14 @@
+import logging
 import threading
 import time
 
 from lib.globals import LOGGER_TAG, SHOW_EMOTION_FOR_TIME
+import lib.emotions_library
 
 
 class EmotionsDisplayer(threading.Thread):
     def __init__(self, name):
-        super(EyeDisplay, self).__init__(name=name)
+        super(EmotionsDisplayer, self).__init__(name=name)
         self.logger = logging.getLogger(LOGGER_TAG)
         self.execute_command = None
         self.current_command = None
