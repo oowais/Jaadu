@@ -1,6 +1,3 @@
-# GPIO pins handling
-RPi.GPIO
-
 # MQTT communication
 paho-mqtt
 
