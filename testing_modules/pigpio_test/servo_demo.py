@@ -47,13 +47,12 @@ print("Sending servos pulses to GPIO {}, control C to stop.".
 # while True:
 try:
   for g in G:
-     pi.set_servo_pulsewidth(g, 500)
+     pi.set_servo_pulsewidth(g, 1166)
      time.sleep(0.5)
-     pi.set_servo_pulsewidth(g, 2500)
+     pi.set_servo_pulsewidth(g, 2166)
      time.sleep(0.5)
-     pi.set_servo_pulsewidth(g, 1500)
-     time.sleep(0.5)
-
+     # pi.set_servo_pulsewidth(g, 944)
+     # time.sleep(0.5)
      # pi.set_servo_pulsewidth(g, width[g])
      # print(g, width[g])
      # width[g] += step[g]

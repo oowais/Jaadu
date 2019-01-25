@@ -1,16 +1,55 @@
-import logging
+import time
+import pigpio
 import threading
 import time
 
-from lib.globals import LOGGER_TAG
-from lib.walk_pigpio_controller import PIGPIOController
+WALKING_PINS = [("left_leg", 16), ("left_foot", 20), ("right_leg", 25), ("right_foot", 26)]
+
+
+class PIGPIOController:
+    def __init__(self):
+        self.pins_used = {}
+        self.module_status = False
+        self.ignore_control_values = False
+        self.pi = None
+
+    def stop_pigpio_control(self):
+        self.ignore_control_values = True
+
+    def start_pigpio_control(self):
+        self.ignore_control_values = False
+
+    def pin_setup(self):
+        if not self.module_status:
+            for name, pin in WALKING_PINS:
+                self.pins_used[name] = pin
+            self.pi = pigpio.pi()
+            self.module_status = True
+
+    def cleanup(self):
+        if self.module_status:
+            for _, pin in self.pins_used.items():
+                self.pi.set_servo_pulsewidth(pin, 0)
+            self.pi.stop()
+            self.pins_used = {}
+            self.module_status = False
+
+    def control_pins(self, control_values, delay=1):
+        for name, value in control_values:
+            if self.ignore_control_values:
+                return
+            elif name not in self.pins_used:
+                continue
+            else:
+                self.pi.set_servo_pulsewidth(self.pins_used.get(name), value)
+        time.sleep(delay)
 
 
 class Karma(threading.Thread):
     def __init__(self):
         super(Karma, self).__init__(name=type(self).__name__)
-        self.logger = logging.getLogger(LOGGER_TAG)
         self.pigpio_control = PIGPIOController()
+        self.pigpio_control.pin_setup()
         self.walking_command = None
         self.current_command = None
 
@@ -56,7 +95,6 @@ class Karma(threading.Thread):
             self.pigpio_control.stop_pigpio_control()
 
     def run(self):
-        self.logger.info("Starting off Movement Listener ...")
         self.default_position()
         while True:
             if self.walking_command is None:
@@ -67,7 +105,6 @@ class Karma(threading.Thread):
                 self.pigpio_control.start_pigpio_control()
                 self.current_command = self.walking_command
                 command = self.current_command
-                self.logger.debug("[Walker] Received command : {}".format(command))
                 if command == "hello":
                     self.hello()
                 elif command == "forward":
@@ -79,7 +116,8 @@ class Karma(threading.Thread):
                 elif command == "stop":
                     self.walking_command = None
                     self.default_position()
-                else:
-                    self.logger.error("Command {} received doesn't match with "
-                                      "pre-loaded commands, ignoring...".format(command))
                 self.current_command = None
+                
+if __name__ == '__main__':
+    control = Karma()
+    control.forward()
