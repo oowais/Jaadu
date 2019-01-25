@@ -21,8 +21,7 @@ class PIGPIOController:
         if not self.module_status:
             for name, pin in WALKING_PINS:
                 self.pins_used[name] = pin
-            if not self.pi.connected:
-                self.pi = pigpio.pi()
+            self.pi = pigpio.pi()
             self.module_status = True
 
     def cleanup(self):
