@@ -12,7 +12,7 @@ Pin 3 - GPIO 2 / I2C1 SDA - SDA
 Pin 5 - GPIO 3 / I2C1 SCL - SCL  
 
 #### Led Strip
-Pin 10 - GPIO 15
+Pin 12 - GPIO 18
 
 #### Walking Pins
 left_leg   GPIO 16  

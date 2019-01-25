@@ -7,6 +7,7 @@ from lib.globals import LOGGER_TAG
 from lib.movement import Karma
 from lib.hand_coordinator import MargDarshan
 from lib.eye_emotions import EyeDisplay
+from lib.ground_coordinator import Prithvi
 from lib.mqtt_listener import Samsara
 
 
@@ -25,10 +26,12 @@ class Atman(threading.Thread):
         walker_obj = Karma()
         emotional_eye_obj = EyeDisplay()
         hand_ifc_obj = MargDarshan(talk_queue=self.event_queue)
+        ground_ifc_obj = Prithvi(talk_queue=self.event_queue)
         mqtt_obj.start()
         walker_obj.start()
         emotional_eye_obj.start()
         hand_ifc_obj.start()
+        ground_ifc_obj.start()
         self.walker_command_send = walker_obj.set_walking_command
         self.emotional_command_eye = emotional_eye_obj.set_emotion_command
         self.the_info_src = mqtt_obj.get_latest_value
@@ -50,6 +53,13 @@ class Atman(threading.Thread):
             elif command == "clear_and_emotify":
                 self.event_queue.put("move stop")
             elif command == "look_up":
+                pass
+        elif module == "ground":
+            if command == "crocodile":
+                pass
+            elif command == "plant":
+                pass
+            elif command == "clear":
                 pass
         else:
             self.logger.error("The desired module is not configured, ignoring...")
