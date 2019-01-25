@@ -57,7 +57,8 @@ class EyeDisplay(EmotionsDisplayer):
             "self.set_pixels(lib.emotions_library.LEFT_NORMAL, lib.emotions_library.RIGHT_NORMAL)",
             "time.sleep(2)",
             "self.clear_buffer()",
-            "self.set_pixels(lib.emotions_library.LEFT_NORMAL_2, lib.emotions_library.RIGHT_NORMAL_2)"
+            "self.set_pixels(lib.emotions_library.LEFT_NORMAL_2, lib.emotions_library.RIGHT_NORMAL_2)",
+            "time.sleep(2)"
         ]
         self.execute_emotion(commands_loop=normal_loop, next_emotion="sleepy")
 
@@ -65,9 +66,10 @@ class EyeDisplay(EmotionsDisplayer):
         happy_loop = [
             "self.clear_buffer()",
             "self.set_pixels(lib.emotions_library.LEFT_HAPPY, lib.emotions_library.RIGHT_HAPPY)",
-            "time.sleep(1)",
+            "time.sleep(0.7)",
             "self.clear_buffer()",
-            "self.set_pixels(lib.emotions_library.LEFT_HAPPY_2, lib.emotions_library.RIGHT_HAPPY_2)"
+            "self.set_pixels(lib.emotions_library.LEFT_HAPPY_2, lib.emotions_library.RIGHT_HAPPY_2)",
+            "time.sleep(0.7)"
         ]
         self.execute_emotion(commands_loop=happy_loop)
 
@@ -84,7 +86,8 @@ class EyeDisplay(EmotionsDisplayer):
             "self.set_pixels(lib.emotions_library.LEFT_ANGRY, lib.emotions_library.RIGHT_ANGRY)",
             "time.sleep(1)",
             "self.clear_buffer()",
-            "self.set_pixels(lib.emotions_library.LEFT_ANGRY_2, lib.emotions_library.RIGHT_ANGRY_2)"
+            "self.set_pixels(lib.emotions_library.LEFT_ANGRY_2, lib.emotions_library.RIGHT_ANGRY_2)",
+            "time.sleep(1)"
         ]
         self.execute_emotion(commands_loop=angry_loop)
 
@@ -101,7 +104,8 @@ class EyeDisplay(EmotionsDisplayer):
             "self.set_pixels(lib.emotions_library.LEFT_SURPRISED, lib.emotions_library.RIGHT_SURPRISED)",
             "time.sleep(1)",
             "self.clear_buffer()",
-            "self.set_pixels(lib.emotions_library.LEFT_SURPRISED_2, lib.emotions_library.RIGHT_SURPRISED_2)"
+            "self.set_pixels(lib.emotions_library.LEFT_SURPRISED_2, lib.emotions_library.RIGHT_SURPRISED_2)",
+            "time.sleep(1)"
         ]
         self.execute_emotion(commands_loop=surprised_loop)
 
@@ -111,7 +115,8 @@ class EyeDisplay(EmotionsDisplayer):
             "self.set_pixels(lib.emotions_library.LEFT_LOW_POWER, lib.emotions_library.RIGHT_LOW_POWER)",
             "time.sleep(0.5)",
             "self.clear_buffer()",
-            "self.set_pixels(lib.emotions_library.LEFT_LOW_POWER_2, lib.emotions_library.RIGHT_LOW_POWER_2)"
+            "self.set_pixels(lib.emotions_library.LEFT_LOW_POWER_2, lib.emotions_library.RIGHT_LOW_POWER_2)",
+            "time.sleep(0.5)"
         ]
         self.execute_emotion(commands_loop=low_power_loop)
 

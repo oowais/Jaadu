@@ -85,36 +85,32 @@ void moveParts(sControl *part1, sControl *part2, byte part1DesiredAngle = 0,
 }
 
 void standUp() {
-  moveParts(&leftLeg, &rightLeg, 100, 180);
-  moveParts(&leftFoot, &rightFoot, 50, 180);
+  moveParts(&leftLeg, &rightLeg, 60, 180);
+  moveParts(&leftFoot, &rightFoot, 45, 180);
   //  delay(500);
 
   byte left = 50;
   byte right = 180;
 
   for (byte i = 0; i < 10 ; i++) {
-    left += 10;
+    left += 7;
     right -= 5;
     moveParts(&leftFoot, &rightFoot, left, right, false, 70);
   }
-  for (byte i = 0; i < 5 ; i++) {
-    right -= 20;
-    movePart(&rightFoot, right, false, 70);
+  for (byte i = 0; i < 10 ; i++) {
+    right -= 9;
+    movePart(&rightFoot, right, false, 35);
   }
   delay(200);
 }
 
 void defaultPosition() {
-
-  //go till extreme ends, to make sure legs dont get stuck somehow
-  //  moveParts(&leftLeg, &rightLeg, 180, 90);
-
-  moveParts(&leftLeg, &rightLeg, 100, 180);//legs center
-  moveParts(&leftFoot, &rightFoot, 150, 30);//feet down
+  moveParts(&leftLeg, &rightLeg, 150, 180);//legs center
+  moveParts(&leftFoot, &rightFoot, 120, 40);//feet down
 }
 
 void hello() {
-  moveParts(&leftFoot, &rightFoot, 50, 180); //left foot straight, right foot up
+  moveParts(&leftFoot, &rightFoot, 45, 180); //left foot straight, right foot up
   for (byte i = 0; i < 6; i++) { // move right leg back and forth
     movePart(&rightLeg, 150, false, 200);
     movePart(&rightLeg, 180, false, 200);
@@ -123,10 +119,10 @@ void hello() {
 
 void rotateLeft() {
   for (byte i = 0; i < 5; i++) {
-    moveParts(&leftFoot, &rightFoot, 50, 130, false, 300); //feet straight
-    moveParts(&leftLeg, &rightLeg, 180, 180, false, 300); //left leg extreme right leg centre
-    moveParts(&leftFoot, &rightFoot, 150, 30, false, 300); //feet down
-    moveParts(&leftLeg, &rightLeg, 100, 90, false, 300); //left leg centre, right leg extreme
+    moveParts(&leftFoot, &rightFoot, 45, 130, false, 300); //feet straight
+    moveParts(&leftLeg, &rightLeg, 150, 180, false, 300); //left leg extreme right leg centre
+    moveParts(&leftFoot, &rightFoot, 120, 40, false, 300); //feet down
+    moveParts(&leftLeg, &rightLeg, 60, 90, false, 300); //left leg centre, right leg extreme
   }
   defaultPosition();
   servoDetachAll();
@@ -134,10 +130,10 @@ void rotateLeft() {
 
 void rotateRight() {
   for (byte i = 0; i < 5; i++) {
-    moveParts(&leftFoot, &rightFoot, 50, 130, false, 300); //feet straight
-    moveParts(&leftLeg, &rightLeg, 100, 90, false, 300); //left leg centre right lef extreme
-    moveParts(&leftFoot, &rightFoot, 150, 30, false, 300); //feet down
-    moveParts(&leftLeg, &rightLeg, 180, 180, false, 300); //left leg extreme, right leg center
+    moveParts(&leftFoot, &rightFoot, 45, 130, false, 300); //feet straight
+    moveParts(&leftLeg, &rightLeg, 60, 90, false, 300); //left leg centre right lef extreme
+    moveParts(&leftFoot, &rightFoot, 120, 40, false, 300); //feet down
+    moveParts(&leftLeg, &rightLeg, 150, 180, false, 300); //left leg extreme, right leg center
   }
   defaultPosition();
   servoDetachAll();
@@ -145,10 +141,10 @@ void rotateRight() {
 
 void forward() {
   for (int i = 0; i < 5; i++) {
-    moveParts(&leftFoot, &rightFoot, 150, 30, false, 300); //feet down
-    moveParts(&leftLeg, &rightLeg, 180, 90, false, 300); //legs extreme
+    moveParts(&leftFoot, &rightFoot, 120, 40, false, 300); //feet down
+    moveParts(&leftLeg, &rightLeg, 150, 90, false, 300); //legs extreme
     moveParts(&leftFoot, &rightFoot, 10, 180, false, 300); //feet up
-    moveParts(&leftLeg, &rightLeg, 100, 180, false, 300); //legs centre
+    moveParts(&leftLeg, &rightLeg, 60, 180, false, 300); //legs centre
   }
   defaultPosition();
   servoDetachAll();
@@ -157,8 +153,8 @@ void forward() {
 void setup() {
   Serial.begin(9600);
   //  defaultPosition();
-  //  hello();
-  //  standUp();
+  hello();
+  standUp();
   //  forward();
   //  rotateLeft();
   //  rotateRight();

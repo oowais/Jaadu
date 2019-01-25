@@ -71,7 +71,6 @@ class Karma(threading.Thread):
         if self.current_command != None and self.walking_command != self.current_command:
             self.gpio_control.stop_gpio_control()
 
-
     def run(self):
         self.logger.info("Starting off Movement Listener ...")
         self.default_position()
