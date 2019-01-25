@@ -1,13 +1,5 @@
-#include <Arduino_FreeRTOS.h>
 #include <SoftwareSerial.h>
 #include "gateway.h"
-
-// FreeRTOS tasks
-void TaskUltraSonicSensorOneRead(void *pvParameters);
-void TaskUltraSonicSensorTwoRead(void *pvParameters);
-void TaskLEDStripOneDisplay(void *pvParameters);
-void TaskLEDStripTwoDisplay(void *pvParameters);
-void TaskBluetoothComm(void *pvParameters);
 
 // All connections
 // Crocodile
@@ -23,84 +15,39 @@ byte rx_conn = 5;
 byte tx_conn = 6;
 
 // Gateways to Monitor
-Gateway crocodile;
-Gateway plant;
-Gateway *activatedGateway;
+Gateway *activatedGateway = NULL;
+Gateway *lastWeKnow = NULL;
+Gateway crocodile = Gateway('c', crocodile_us_echo, crocodile_us_trigger, crocodile_led_din, 8, &activatedGateway);
+Gateway plant = Gateway('p', plant_us_echo, plant_us_trigger, plant_led_din, 8, &activatedGateway);
 
 SoftwareSerial neelaDanth(rx_conn, tx_conn);
 
 void setup() {
   Serial.begin(9600);
+  while (!Serial) {;}
+
   neelaDanth.begin(9600);
-  
-  activatedGateway = NULL;
-
-  crocodile = Gateway(crocodile_us_echo, crocodile_us_trigger, crocodile_led_din, 2, &activatedGateway);
-  plant = Gateway(plant_us_echo, plant_us_trigger, plant_led_din, 2, &activatedGateway);
-
-  xTaskCreate(TaskUltraSonicSensorOneRead, (const portCHAR *) "USonicReadOne", 128, NULL, 1, NULL);
-  xTaskCreate(TaskUltraSonicSensorTwoRead, (const portCHAR *) "USonicReadTwo", 128, NULL, 1, NULL);
-  xTaskCreate(TaskLEDStripOneDisplay, (const portCHAR *) "LEDStripLightOne", 128, NULL, 1, NULL);
-  xTaskCreate(TaskLEDStripTwoDisplay, (const portCHAR *) "LEDStripLightTwo", 128, NULL, 1, NULL);
-  xTaskCreate(TaskBluetoothComm, (const portCHAR *) "BluetoothComm", 128, NULL, 1, NULL);
+  crocodile.setup();
+  plant.setup();
 }
 
-void loop() {}
-
-void TaskUltraSonicSensorOneRead( void *pvParameters __attribute__((unused)) )
+void loop()
 {
-  for (;;) {
-    crocodile.getDistanceTrigger();
-    vTaskDelay(1);
-  }
-}
-
-void TaskUltraSonicSensorTwoRead( void *pvParameters __attribute__((unused)) )
-{
-  for (;;) {
-    plant.getDistanceTrigger();
-    vTaskDelay(1);
-  }
-}
-
-void TaskLEDStripOneDisplay( void *pvParameters __attribute__((unused)) )
-{
-  for (;;) {
-    crocodile.lightGateway();
-    vTaskDelay(1);
-  }
-}
-
-void TaskLEDStripTwoDisplay( void *pvParameters __attribute__((unused)) )
-{
-  for (;;) {
-    plant.lightGateway();
-    vTaskDelay(1);
-  }
-}
-
-void TaskBluetoothComm( void *pvParameters __attribute__((unused)) )
-{
-  Gateway *lastWeKnow = NULL;
-  for (;;) {
-    byte c;
-    if (neelaDanth.available() > 0) {
-      c = neelaDanth.read();
-      if (c == "s") {
-        if (activatedGateway == NULL) {
-          neelaDanth.print("1");
-        } else {
-          neelaDanth.print("0");
-        }
-      }
-
-    } else if (lastWeKnow != activatedGateway) {
-      lastWeKnow = activatedGateway;
-      if (&crocodile == activatedGateway)
-        neelaDanth.print("c");
-      else if (&plant == activatedGateway)
-        neelaDanth.print("p");
+  crocodile.getDistanceTrigger();
+  plant.getDistanceTrigger();
+  crocodile.lightGateway();
+  plant.lightGateway();
+  if (lastWeKnow != activatedGateway) {
+    lastWeKnow = activatedGateway;
+    if (&crocodile == activatedGateway) {
+      // Send signal for crocodile gate trigger
+      neelaDanth.print(crocodile.getUniqueCharID());
+    } else if (&plant == activatedGateway) {
+      // Send signal for plant gate trigger
+      neelaDanth.print(plant.getUniqueCharID());
+    } else if (NULL == activatedGateway) {
+      // Signifying nothing triggered signal
+      neelaDanth.print("x");
     }
-    vTaskDelay(1);
   }
 }
