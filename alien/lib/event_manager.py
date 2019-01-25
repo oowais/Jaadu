@@ -4,7 +4,7 @@ import threading
 import time
 
 from lib.globals import LOGGER_TAG
-from lib.movement2.0 import Karma
+from lib.movement_new import Karma
 from lib.hand_coordinator import MargDarshan
 from lib.eye_emotions import EyeDisplay
 from lib.mqtt_listener import Samsara
