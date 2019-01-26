@@ -23,6 +23,8 @@ class Karma(threading.Thread):
             self.pigpio_control.control_pins(control_values=[("right_leg", 2000)], delay=0.3)
             self.pigpio_control.control_pins(control_values=[("right_leg", 2500)], delay=0.3)
         self.default_position()
+        if self.walking_command == "hello":
+            self.walking_command = None
 
     def forward(self):
         self.pigpio_control.control_pins(control_values=[("left_foot", 1833), ("right_foot", 944)], delay=0.5)

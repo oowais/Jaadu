@@ -48,6 +48,6 @@ class MargDarshan(threading.Thread):
             elif data == "u":
                 self.q.put("hand look_up")
             elif data == "x":
-                self.q.put("hand clear_and_emotify")
+                self.q.put("hand clear")
             else:
                 self.logger.warning("Not able to recognize character.. Ignoring..")

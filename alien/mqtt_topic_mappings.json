@@ -1,6 +1,14 @@
 [
     {
-      "topic" : "terrarium/crocodile/emotion",
-      "key" : "crocodile_emotion"
+      "topic" : "Crocodile/Emotions",
+      "key" : "crocodile"
+    },
+    {
+      "topic" : "plant/emotion",
+      "key" : "plant"
+    },
+    {
+      "topic" : "jellyfish/mood",
+      "key" : "squid"
     }
 ]

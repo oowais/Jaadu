@@ -2,7 +2,7 @@ import logging
 import threading
 import time
 
-from lib.globals import LOGGER_TAG, SHOW_EMOTION_FOR_TIME
+from lib.globals import LOGGER_TAG
 import lib.emotions_library
 
 
@@ -20,28 +20,26 @@ class EmotionsDisplayer(threading.Thread):
                                  "angry": self.angry,
                                  "sleepy": self.sleepy,
                                  "surprised": self.surprised,
-                                 "lowpower": self.low_power}
+                                 "lowpower": self.low_power,
+                                 "hungry" : self.angry,
+                                 "relaxed" : self.happy,
+                                 "neutral" : self.sleepy,
+                                 "scan" : self.scan,
+                                 "peaceful" : self.sleepy
+                                 }
 
     def set_emotion_command(self, command):
         if command in self.command_mappings.keys():
             self.execute_command = command
             self.logger.debug("Changing to emotion : {}".format(command))
 
-    def execute_emotion(self, commands_loop, loop=True, next_emotion="normal",
-                        max_time=SHOW_EMOTION_FOR_TIME):
-        time_now = time.time()
-        time_to_end = time_now + max_time
-        while time_now < time_to_end:
+    def execute_emotion(self, commands_loop):
+        while True:
             for item in commands_loop:
                 if self.execute_command == self.current_command:
                     eval(item)
                 else:
                     return
-            if not loop:
-                break
-            time_now = time.time()
-        self.set_emotion_command(command=next_emotion)
-        self.logger.debug("Going next to {} mode ...".format(next_emotion))
 
     def run(self):
         while True:
@@ -77,4 +75,7 @@ class EmotionsDisplayer(threading.Thread):
         pass
 
     def low_power(self):
+        pass
+
+    def scan(self):
         pass

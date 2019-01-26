@@ -5,8 +5,7 @@ import threading
 import time
 
 from lib.display_emotions import EmotionsDisplayer
-from lib.globals import (LOGGER_TAG, SHOW_EMOTION_FOR_TIME, NUM_PIXELS_USED,
-                         LED_STRIP_PIN)
+from lib.globals import (LOGGER_TAG, NUM_PIXELS_USED LED_STRIP_PIN)
 
 
 class IllusionaryBrain(EmotionsDisplayer):
@@ -15,6 +14,7 @@ class IllusionaryBrain(EmotionsDisplayer):
         self.pixels = None
         self.rainbow_cycle_index = 0
         self.breathing_index = 0
+        self.scan_iter = 0
 
     def module_setup(self):
         if not self.module_up:
@@ -28,15 +28,16 @@ class IllusionaryBrain(EmotionsDisplayer):
         startup_loop = [
             "self.pixels.fill(color=(255, 0, 0))",
             "self.pixels.show()",
-            "time.sleep(1)",
+            "time.sleep(2)",
             "self.pixels.fill(color=(0, 255, 0))",
             "self.pixels.show()",
-            "time.sleep(1)",
+            "time.sleep(2)",
             "self.pixels.fill(color=(0, 0, 255))",
             "self.pixels.show()",
-            "time.sleep(1)"
+            "time.sleep(2)"
         ]
-        self.execute_emotion(commands_loop=startup_loop, loop=False)
+        self.pixels.brightness = 1
+        self.execute_emotion(commands_loop=startup_loop)
 
     def normal(self):
         normal_loop = [
@@ -44,7 +45,8 @@ class IllusionaryBrain(EmotionsDisplayer):
             "self.pixels.show()",
             "time.sleep(0.001)"
         ]
-        self.execute_emotion(commands_loop=normal_loop, next_emotion="sleepy")
+        self.pixels.brightness = 1
+        self.execute_emotion(commands_loop=normal_loop)
 
     def happy(self):
         happy_loop = [
@@ -55,6 +57,7 @@ class IllusionaryBrain(EmotionsDisplayer):
             "self.pixels.show()",
             "time.sleep(1)"
         ]
+        self.pixels.brightness = 1
         self.execute_emotion(commands_loop=happy_loop)
 
     def sad(self):
@@ -75,6 +78,7 @@ class IllusionaryBrain(EmotionsDisplayer):
             "self.pixels.show()",
             "time.sleep(1)"
         ]
+        self.pixels.brightness = 1
         self.execute_emotion(commands_loop=angry_loop)
 
     def sleepy(self):
@@ -84,7 +88,7 @@ class IllusionaryBrain(EmotionsDisplayer):
             "self.pixels.show()",
             "time.sleep(0.001)"
         ]
-        self.execute_emotion(commands_loop=sleepy_loop, next_emotion="sleepy")
+        self.execute_emotion(commands_loop=sleepy_loop)
 
     def surprised(self):
         surprised_loop = [
@@ -95,6 +99,7 @@ class IllusionaryBrain(EmotionsDisplayer):
             "self.pixels.show()",
             "time.sleep(1)"
         ]
+        self.pixels.brightness = 1
         self.execute_emotion(commands_loop=surprised_loop)
 
     def low_power(self):
@@ -105,6 +110,25 @@ class IllusionaryBrain(EmotionsDisplayer):
             "time.sleep(0.001)"
         ]
         self.execute_emotion(commands_loop=low_power_loop)
+
+    def scan(self):
+        scan_loop = [
+            "self.scan_light()",
+            "self.pixels.show()",
+            "time.sleep(0.01)"
+        ]
+        self.execute_emotion(commands_loop=scan_loop)
+
+    def scan_light(self):
+        if self.scan_iter < NUM_PIXELS_USED:
+            self.pixels[self.scan_iter] = (255, 0, 0)
+        elif self.scan_iter >= NUM_PIXELS_USED and self.scan_iter < (NUM_PIXELS_USED * 2):
+            self.pixels[self.scan_iter - NUM_PIXELS_USED] = (0, 255, 0)
+        elif self.scan_iter >= (NUM_PIXELS_USED * 2) and self.scan_iter < (NUM_PIXELS_USED * 3):
+            self.pixels[self.scan_iter - (NUM_PIXELS_USED * 2)] = (0, 0, 255)
+        else:
+            self.scan_iter = -1
+        self.scan_iter += 1
 
     def wheel(self, pos):
         if pos < 0 or pos > 255:

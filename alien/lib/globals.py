@@ -31,8 +31,6 @@ HAND_BLUETOOTH_PORT = 1
 GROUND_BLUETOOTH_MAC = "98:D3:41:FD:40:7F"
 GROUND_BLUETOOTH_PORT = 1
 
-# Eyes and Brain Modules
-SHOW_EMOTION_FOR_TIME = 120
 # Eyes specific configuration
 EYE_I2C_ADDRESS = 0x70
 # Brain specific configuration

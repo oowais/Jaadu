@@ -148,7 +148,7 @@ class Samsara(threading.Thread):
         self.logger.debug("Received message {} from topic {}".format(msg.topic, msg.payload))
         internal_key = self.key_topic_mappings.get(msg.topic, None)
         if internal_key:
-            self.all_saved_info[internal_key] = msg.payload.decode()
+            self.all_saved_info[internal_key] = msg.payload.decode().strip().lower()
 
     def get_latest_value(self, key):
         return self.all_saved_info.get(key, None)

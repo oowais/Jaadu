@@ -20,6 +20,45 @@ class EyeDisplay(EmotionsDisplayer):
             self.set_emotion_command(command="startup")
             self.logger.info("Successfully setup the Eyes Module to display emotions ...")
 
+    def scan(self):
+        scan_loop = [
+            "self.clear_buffer()",
+            "self.write_buffer()",
+            "self.set_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(0), lib.emotions_library.SCAN_LINE_HORIZ_I(0))",
+            "time.sleep(0.1)",
+            "self.set_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(1), lib.emotions_library.SCAN_LINE_HORIZ_I(1))",
+            "time.sleep(0.1)",
+            "self.set_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(2), lib.emotions_library.SCAN_LINE_HORIZ_I(2))",
+            "time.sleep(0.1)",
+            "self.set_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(3), lib.emotions_library.SCAN_LINE_HORIZ_I(3))",
+            "time.sleep(0.1)",
+            "self.set_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(4), lib.emotions_library.SCAN_LINE_HORIZ_I(4))",
+            "time.sleep(0.1)",
+            "self.set_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(5), lib.emotions_library.SCAN_LINE_HORIZ_I(5))",
+            "time.sleep(0.1)",
+            "self.set_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(6), lib.emotions_library.SCAN_LINE_HORIZ_I(6))",
+            "time.sleep(0.1)",
+            "self.set_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(7), lib.emotions_library.SCAN_LINE_HORIZ_I(7))",
+            "time.sleep(0.1)",
+            "self.clear_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(7), lib.emotions_library.SCAN_LINE_HORIZ_I(7))",
+            "time.sleep(0.1)",
+            "self.clear_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(6), lib.emotions_library.SCAN_LINE_HORIZ_I(6))",
+            "time.sleep(0.1)",
+            "self.clear_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(5), lib.emotions_library.SCAN_LINE_HORIZ_I(5))",
+            "time.sleep(0.1)",
+            "self.clear_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(4), lib.emotions_library.SCAN_LINE_HORIZ_I(4))",
+            "time.sleep(0.1)",
+            "self.clear_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(3), lib.emotions_library.SCAN_LINE_HORIZ_I(3))",
+            "time.sleep(0.1)",
+            "self.clear_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(2), lib.emotions_library.SCAN_LINE_HORIZ_I(2))",
+            "time.sleep(0.1)",
+            "self.clear_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(1), lib.emotions_library.SCAN_LINE_HORIZ_I(1))",
+            "time.sleep(0.1)",
+            "self.clear_pixels(lib.emotions_library.SCAN_LINE_HORIZ_I(0), lib.emotions_library.SCAN_LINE_HORIZ_I(0))",
+            "time.sleep(0.1)",
+        ]
+        self.execute_emotion(commands_loop=scan_loop)
+
     def startup(self):
         startup_loop = [
             "self.clear_buffer()",
@@ -47,7 +86,7 @@ class EyeDisplay(EmotionsDisplayer):
             "self.clear_pixels(lib.emotions_library.LEFT_BOOT_8, lib.emotions_library.RIGHT_BOOT_8)",
             "time.sleep(0.5)"
         ]
-        self.execute_emotion(commands_loop=startup_loop, loop=False)
+        self.execute_emotion(commands_loop=startup_loop)
 
     def normal(self):
         normal_loop = [
@@ -58,7 +97,7 @@ class EyeDisplay(EmotionsDisplayer):
             "self.set_pixels(lib.emotions_library.LEFT_NORMAL_2, lib.emotions_library.RIGHT_NORMAL_2)",
             "time.sleep(2)"
         ]
-        self.execute_emotion(commands_loop=normal_loop, next_emotion="sleepy")
+        self.execute_emotion(commands_loop=normal_loop)
 
     def happy(self):
         happy_loop = [
@@ -94,7 +133,7 @@ class EyeDisplay(EmotionsDisplayer):
             "self.clear_buffer()",
             "self.set_pixels(lib.emotions_library.LEFT_SLEEPY, lib.emotions_library.RIGHT_SLEEPY)"
         ]
-        self.execute_emotion(commands_loop=sleepy_loop, next_emotion="sleepy")
+        self.execute_emotion(commands_loop=sleepy_loop)
 
     def surprised(self):
         surprised_loop = [
@@ -119,23 +158,31 @@ class EyeDisplay(EmotionsDisplayer):
         self.execute_emotion(commands_loop=low_power_loop)
 
     def clear_pixels(self, l_arr, r_arr):
-        for a in l_arr:
-            self.left_eye.set_pixel(a[0], a[1], 0)
-        for a in r_arr:
-            self.right_eye.set_pixel(a[0], a[1], 0)
+        if self.left_eye:
+            for a in l_arr:
+                self.left_eye.set_pixel(a[0], a[1], 0)
+        if self.right_eye:
+            for a in r_arr:
+                self.right_eye.set_pixel(a[0], a[1], 0)
         self.write_buffer()
 
     def set_pixels(self, l_arr, r_arr):
-        for a in l_arr:
-            self.left_eye.set_pixel(a[0], a[1], 1)
-        for a in r_arr:
-            self.right_eye.set_pixel(a[0], a[1], 1)
+        if self.left_eye:
+            for a in l_arr:
+                self.left_eye.set_pixel(a[0], a[1], 1)
+        if self.right_eye:
+            for a in r_arr:
+                self.right_eye.set_pixel(a[0], a[1], 1)
         self.write_buffer()
 
     def clear_buffer(self):
-        self.left_eye.clear()
-        self.right_eye.clear()
+        if self.left_eye:
+            self.left_eye.clear()
+        if self.right_eye:
+            self.right_eye.clear()
 
     def write_buffer(self):
-        self.left_eye.write_display()
-        self.right_eye.write_display()
+        if self.left_eye:
+            self.left_eye.write_display()
+        if self.right_eye:
+            self.right_eye.write_display()

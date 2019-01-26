@@ -228,3 +228,5 @@ RIGHT_LOW_POWER_2 = [(0, 3), (0, 4),
                      (4, 2), (4, 5),
                      (5, 2), (5, 5),
                      (6, 2), (6, 3), (6, 4), (6, 5)]
+
+SCAN_LINE_HORIZ_I = lambda i : [(i, j) for j in range(8)]
