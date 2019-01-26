@@ -24,7 +24,7 @@ class Prithvi(threading.Thread):
                 self.ground_blue_sock.close()
                 time.sleep(1)
             else:
-                self.logger.info('Connected to Hand Bluetooth Module..!')
+                self.logger.info('Connected to Ground Bluetooth Module..!')
                 self.module_up = True
 
     def run(self):

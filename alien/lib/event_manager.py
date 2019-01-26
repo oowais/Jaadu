@@ -54,12 +54,6 @@ class Atman(threading.Thread):
         elif module == "emotify":
             self.emotional_command_eye(command)
             self.emotional_command_brain(command)
-            remove_item = []
-            for t, event in self.timed_wait_events.items():
-                if event.startswith("emotify"):
-                    remove_item.append(t)
-            for item in remove_item:
-                self.timed_wait_events.pop(item)
             if command == "normal":
                 self.timed_wait_events[time_now + 30] = "emotify sleepy"
             else:
@@ -78,6 +72,12 @@ class Atman(threading.Thread):
             elif command == "look_up":
                 # User wishes to get the emotions for the Squid
                 self.event_queue.put("move hello")
+                remove_item = []
+                for t, event in self.timed_wait_events.items():
+                    if event.startswith("emotify"):
+                        remove_item.append(t)
+                for item in remove_item:
+                    self.timed_wait_events.pop(item)
                 self.timed_wait_events[time_now + 5] = "emotify scan"
                 emotion_value = self.the_info_src("squid")
                 if not emotion_value:
@@ -97,6 +97,12 @@ class Atman(threading.Thread):
                 if not self.ground_module_last:
                     return
                 self.event_queue.put("move hello")
+                remove_item = []
+                for t, event in self.timed_wait_events.items():
+                    if event.startswith("emotify"):
+                        remove_item.append(t)
+                for item in remove_item:
+                    self.timed_wait_events.pop(item)
                 self.timed_wait_events[time_now + 5] = "emotify scan"
                 emotion_value = self.the_info_src(self.ground_module_last)
                 if not emotion_value:
