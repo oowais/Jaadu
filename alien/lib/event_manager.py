@@ -3,6 +3,7 @@ import queue
 import threading
 import time
 
+from lib.brain_emotions import IllusionaryBrain
 from lib.globals import LOGGER_TAG
 from lib.movement import Karma
 from lib.hand_coordinator import MargDarshan
@@ -16,7 +17,8 @@ class Atman(threading.Thread):
         super(Atman, self).__init__(name=type(self).__name__)
         self.logger = logging.getLogger(LOGGER_TAG)
         self.event_queue = queue.Queue()
-        self.emotional_command_eye = None
+        self.emotional_command_eye = lambda x : x
+        self.emotional_command_brain = lambda x : x
         self.walker_command_send = None
         self.the_info_src = None
         self.setup()
@@ -25,15 +27,18 @@ class Atman(threading.Thread):
         mqtt_obj = Samsara(talk_queue=self.event_queue)
         walker_obj = Karma()
         emotional_eye_obj = EyeDisplay()
+        emotional_brain_obj = IllusionaryBrain()
         hand_ifc_obj = MargDarshan(talk_queue=self.event_queue)
         ground_ifc_obj = Prithvi(talk_queue=self.event_queue)
         mqtt_obj.start()
         walker_obj.start()
         emotional_eye_obj.start()
+        emotional_brain_obj.start()
         hand_ifc_obj.start()
         ground_ifc_obj.start()
         self.walker_command_send = walker_obj.set_walking_command
         self.emotional_command_eye = emotional_eye_obj.set_emotion_command
+        self.emotional_command_brain = emotional_brain_obj.set_emotion_command
         self.the_info_src = mqtt_obj.get_latest_value
 
     def pass_item_to_module(self, item):
@@ -43,6 +48,7 @@ class Atman(threading.Thread):
             self.walker_command_send(command)
         elif module == "emotify":
             self.emotional_command_eye(command)
+            self.emotional_command_brain(command)
         elif module == "hand":
             if command == "forward":
                 self.event_queue.put("move forward")
