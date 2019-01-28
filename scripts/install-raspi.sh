@@ -8,6 +8,9 @@ sudo apt-get install git python3-pip build-essential python3-dev -y
 # For Bluetooth
 sudo apt-get install libbluetooth3 -y
 
+# For LED Strips
+sudo raspi-config nonint do_spi 0
+
 # For LED Matrix
 sudo raspi-config nonint do_i2c 0
 sudo apt-get install python3-smbus i2c-tools python3-pil -y
@@ -16,6 +19,10 @@ cd Adafruit_Python_LED_Backpack; sudo python3 setup.py install
 cd ..; sudo rm -rf Adafruit_Python_LED_Backpack
 sudo sed -i "/dtoverlay=i2c-gpio,bus=3,i2c_gpio_delay_us=1/d" /boot/config.txt
 sudo sh -c "echo 'dtoverlay=i2c-gpio,bus=3,i2c_gpio_delay_us=1' >> /boot/config.txt"
+
+# For pigpio, controlling servo movements
+sudo apt-get install pigpio python3-pigpio
+sudo systemctl enable pigpiod
 
 sudo rm -rf /home/pi/brain/
 
@@ -67,7 +74,7 @@ echo "Type=idle" >> alien.service
 echo "Restart=always" >> alien.service
 echo "StandardOutput=inherit" >> alien.service
 echo "StandardError=inherit" >> alien.service
-echo "User=pi" >> alien.service
+echo "User=root" >> alien.service
 echo "WorkingDirectory=/home/pi/brain/alien" >> alien.service
 echo "ExecStart=$python3_loc main.py -s" >> alien.service
 echo "" >> alien.service
