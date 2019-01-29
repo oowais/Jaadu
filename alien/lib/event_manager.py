@@ -22,6 +22,7 @@ class Atman(threading.Thread):
         self.walker_command_send = lambda x : x
         self.the_info_src = None
         self.ground_module_last = None
+        self.last_emotion_shown = {"time" : 0, "emotion" : None}
         self.timed_wait_events = {}
         self.setup()
 
@@ -50,14 +51,13 @@ class Atman(threading.Thread):
 
         if module == "move":
             self.walker_command_send(command)
+            self.event_queue.put("emotify normal")
 
         elif module == "emotify":
             self.emotional_command_eye(command)
             self.emotional_command_brain(command)
-            if command == "normal":
-                self.timed_wait_events[time_now + 30] = "emotify sleepy"
-            else:
-                self.timed_wait_events[time_now + 30] = "emotify normal"
+            self.last_emotion_shown["time"] = time_now
+            self.last_emotion_shown["emotion"] = command
 
         elif module == "hand":
             if command == "forward":
@@ -72,17 +72,11 @@ class Atman(threading.Thread):
             elif command == "look_up":
                 # User wishes to get the emotions for the Squid
                 self.event_queue.put("move hello")
-                remove_item = []
-                for t, event in self.timed_wait_events.items():
-                    if event.startswith("emotify"):
-                        remove_item.append(t)
-                for item in remove_item:
-                    self.timed_wait_events.pop(item)
-                self.timed_wait_events[time_now + 5] = "emotify scan"
+                self.timed_wait_events[time_now + 3] = "emotify scan"
                 emotion_value = self.the_info_src("squid")
                 if not emotion_value:
                     emotion_value = "surprised"
-                self.timed_wait_events[time_now + 10] = "emotify {}".format(emotion_value)
+                self.timed_wait_events[time_now + 6] = "emotify {}".format(emotion_value)
 
         elif module == "ground":
             if command == "crocodile":
@@ -97,17 +91,11 @@ class Atman(threading.Thread):
                 if not self.ground_module_last:
                     return
                 self.event_queue.put("move hello")
-                remove_item = []
-                for t, event in self.timed_wait_events.items():
-                    if event.startswith("emotify"):
-                        remove_item.append(t)
-                for item in remove_item:
-                    self.timed_wait_events.pop(item)
-                self.timed_wait_events[time_now + 5] = "emotify scan"
+                self.timed_wait_events[time_now + 3] = "emotify scan"
                 emotion_value = self.the_info_src(self.ground_module_last)
                 if not emotion_value:
                     emotion_value = "surprised"
-                self.timed_wait_events[time_now + 10] = "emotify {}".format(emotion_value)
+                self.timed_wait_events[time_now + 6] = "emotify {}".format(emotion_value)
 
         else:
             self.logger.error("The desired module is not configured, ignoring...")
@@ -116,13 +104,21 @@ class Atman(threading.Thread):
         self.logger.info("Starting off Event trigger Listener ...")
         # Get events and send them to respective processes
         while True:
+            time_now = time.time()
+
             remove_later = []
             for event_time, event in self.timed_wait_events.items():
-                if event_time <= time.time():
+                if event_time <= time_now:
                     self.event_queue.put(event)
                     remove_later.append(event_time)
             for item in remove_later:
                 self.timed_wait_events.pop(item)
+
+            if (time_now - self.last_emotion_shown["time"]) >= 30:
+                if self.last_emotion_shown["emotion"] == "normal":
+                    self.event_queue.put("emotify sleepy")
+                else:
+                    self.event_queue.put("emotify normal")
 
             if self.event_queue.empty():
                 time.sleep(1)

@@ -1,11 +1,9 @@
 include <globals.scad>
-use <top.scad>
 
 module eyes_setting(x, z) {
     y = 1;
     difference() {
         cube([x, 1, z]);
-        translate([-0.1, 0, z]) rotate([-lower_elevation_deg, 0, 0]) top(x=x+0.2, z=10);
         
         for (i = [2.5: 2.5: x-2.5]) {
             translate([i, 0.3, z-1]) rotate([-lower_elevation_deg, 0, 0]) cylinder(r=screw_r, h=2);

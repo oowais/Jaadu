@@ -15,10 +15,10 @@ Pin 5 - GPIO 3 / I2C1 SCL - SCL
 Pin 12 - GPIO 18
 
 #### Walking Pins
-left_leg   GPIO 16  
-left_foot  GPIO 20  
-right_leg  GPIO 25  
-right_foot GPIO 26  
+left_leg - pin 36 -  GPIO 16  
+left_foot - pin 38 -  GPIO 20  
+right_leg  - pin 22 - GPIO 25  
+right_foot - pin 37 - GPIO 26  
 
 ## Movement servo values
 | Left foot  | Angle | pigpio width |  |Right foot  | Angle | pigpio width |
