@@ -18,7 +18,7 @@ class Karma(threading.Thread):
         self.pigpio_control.cleanup()
 
     def hello(self):
-        self.pigpio_control.control_pins(control_values=[("left_foot", 1000), ("right_foot", 2500)])
+        self.pigpio_control.control_pins(control_values=[("left_foot", 900), ("right_foot", 2500)])
         for i in range(3):
             self.pigpio_control.control_pins(control_values=[("right_leg", 2000)], delay=0.3)
             self.pigpio_control.control_pins(control_values=[("right_leg", 2500)], delay=0.3)
@@ -27,29 +27,29 @@ class Karma(threading.Thread):
             self.walking_command = None
 
     def forward(self):
-        self.pigpio_control.control_pins(control_values=[("left_foot", 1833), ("right_foot", 944)], delay=0.5)
+        self.pigpio_control.control_pins(control_values=[("left_foot", 1900), ("right_foot", 944)], delay=0.5)
         self.pigpio_control.control_pins(control_values=[("left_leg", 2166), ("right_leg", 1500)], delay=0.5)
-        self.pigpio_control.control_pins(control_values=[("left_foot", 611), ("right_foot", 2500)], delay=0.5)
+        self.pigpio_control.control_pins(control_values=[("left_foot", 500), ("right_foot", 2500)], delay=0.5)
         self.pigpio_control.control_pins(control_values=[("left_leg", 1166), ("right_leg", 2500)], delay=0.5)
         self.default_position()
 
     def turn_right(self):
-        self.pigpio_control.control_pins(control_values=[("left_foot", 611), ("right_foot", 2500)], delay=0.5)
+        self.pigpio_control.control_pins(control_values=[("left_foot", 500), ("right_foot", 2500)], delay=0.5)
         self.pigpio_control.control_pins(control_values=[("left_leg", 1166), ("right_leg", 1500)], delay=0.5)
-        self.pigpio_control.control_pins(control_values=[("left_foot", 1833), ("right_foot", 944)], delay=0.5)
+        self.pigpio_control.control_pins(control_values=[("left_foot", 1900), ("right_foot", 944)], delay=0.5)
         self.pigpio_control.control_pins(control_values=[("left_leg", 2166), ("right_leg", 2500)], delay=0.5)
         self.default_position()
 
     def turn_left(self):
-        self.pigpio_control.control_pins(control_values=[("left_foot", 611), ("right_foot", 2500)], delay=0.5)
+        self.pigpio_control.control_pins(control_values=[("left_foot", 500), ("right_foot", 2500)], delay=0.5)
         self.pigpio_control.control_pins(control_values=[("left_leg", 2166), ("right_leg", 2500)], delay=0.5)
-        self.pigpio_control.control_pins(control_values=[("left_foot", 1833), ("right_foot", 944)], delay=0.5)
+        self.pigpio_control.control_pins(control_values=[("left_foot", 1900), ("right_foot", 944)], delay=0.5)
         self.pigpio_control.control_pins(control_values=[("left_leg", 1166), ("right_leg", 1500)], delay=0.5)
         self.default_position()
 
     def default_position(self):
         self.pigpio_control.control_pins(control_values=[("left_leg", 1166), ("right_leg", 2500)], delay=0.5)
-        self.pigpio_control.control_pins(control_values=[("left_foot", 1833), ("right_foot", 944)], delay=0.5)
+        self.pigpio_control.control_pins(control_values=[("left_foot", 1900), ("right_foot", 944)], delay=0.5)
 
     def set_walking_command(self, command):
         if command in ["hello", "forward", "right", "left", "stop"]:

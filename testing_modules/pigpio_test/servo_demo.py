@@ -73,4 +73,3 @@ for g in G:
    pi.set_servo_pulsewidth(g, 0)
 
 pi.stop()
-
