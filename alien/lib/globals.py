@@ -15,11 +15,20 @@ KEEP_STREAM_TIME = 120
 MQTT_TOPIC_LISTING_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "mqtt_topic_mappings.json")
 
 # Movement
-# GPIO Setup
-MIN_DUTY = 3
-MAX_DUTY = 11
-CENTER = (MAX_DUTY + MIN_DUTY) / 2
-CHANNEL_FREQ = 50
+# --------------- PIGPIO control values (Experimental) ---------------------
+# | Left foot | Angle | pigpio width | | Right foot | Angle | pigpio width |
+# | up        | 10    | 500          | | up         | 180   | 2500         |
+# | straight  | 45    | 900          | | straight   | 130   | 1944         |
+# | down      | 120   | 1900         | | down       | 40    | 944          |
+
+# | Left leg  | Angle | pigpio width | | Right leg  | Angle | pigpio width |
+# | center    | 60    | 1066         | | center     | 180   | 2500         |
+# | extreme   | 150   | 2166         | | extreme    | 90    | 1500         |
+# --------------------------------------------------------------------------
+MOVE_CONTROL_VALUES = {"left_foot" : {"up" : 500, "straight" : 900, "down" : 1900 },
+                       "right_foot" : {"up" : 2500 , "straight" : 1944, "down" : 944 },
+                       "left_leg" : {"center" : 1066, "extreme" : 2166 },
+                       "right_leg" : {"center" : 2500, "extreme" : 1500, "hello" : 2000 }}
 # Movement Setup
 WALKING_PINS = [("left_leg", 16), ("left_foot", 20), ("right_leg", 25), ("right_foot", 26)]
 

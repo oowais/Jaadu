@@ -13,7 +13,6 @@ if __name__ == "__main__":
     parser.add_argument("--log_file", "-lf", default=None, help="Set path to save log output")
     args = parser.parse_args()
 
-    # --------------- Logging setup ---------------------
     logger = logging.getLogger(LOGGER_TAG)
 
     if args.log_file:

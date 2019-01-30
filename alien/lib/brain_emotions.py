@@ -5,7 +5,7 @@ import threading
 import time
 
 from lib.display_emotions import EmotionsDisplayer
-from lib.globals import (LOGGER_TAG, NUM_PIXELS_USED, LED_STRIP_PIN)
+from lib.globals import NUM_PIXELS_USED, LED_STRIP_PIN
 
 
 class IllusionaryBrain(EmotionsDisplayer):

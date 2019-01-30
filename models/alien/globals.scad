@@ -28,7 +28,7 @@ top_total_y = (total_y * cos(elevation_deg)) + 0.74;
 face_total_y = b_legspace;
 face_total_z = total_z - (base_total_z + filler);
 
-// For Battery Holder
+// For Battery Holder (discarded finally)
 bh_y = 5;
 bh_z = 2.9;
 

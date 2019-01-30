@@ -17,4 +17,4 @@ Needs a MQTT broker to be already setup which can relay the commands.
 
 Ofcourse not, that would make it an open field for anyone to mess with the Alien at any point of time.
 
-Credentials need to be setup during the installation phase of the RasPI to allow backdoor functionality.
+Credentials need to be setup during the [installation phase](../scripts/install-raspi.sh) of the RasPI to allow backdoor functionality.
