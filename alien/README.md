@@ -35,7 +35,7 @@ Run the [script](../scripts/) to complete installation of the alien package insi
 Starts the Alien program automatically as a service on the RasPI.
 
 ## Some things to take care
-Changes in __lib/globals.py : __
+Changes in __lib/globals.py__ :
 * __EXTERNAL_BROKER_HOST__ needs to point to the IP address of the MQTT Broker.
 * __EXTERNAL_BROKER_PORT__ needs to be changed if the Broker listens at a different port (1883 is default)
 * __WALKING_PINS__ are RasPI GPIO pin numbers and need to be changed if the connection is made different from as given.
@@ -48,6 +48,6 @@ Experiments can be done using [this](../testing_modules/pigpio_test/servo_demo.p
 * __NUM_PIXELS_USED__ change according to number of LEDs in the strip used in Alien.
 
 
-Changes in __mqtt_topic_mappings.json : __
+Changes in __mqtt_topic_mappings.json__ :
 
 Change the topic on which the emotions are sent by the other entities in the terrarium and unique key we will be using to track those emotions.
