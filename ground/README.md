@@ -9,6 +9,7 @@ Each Gateway has a __LED Strip__ (breathing lights showing Gateway state) and an
 * For Bluetooth :
   * RX (on bluetooth) :arrow_right: tx_conn (on Arduino)
   * TX (on bluetooth) :arrow_right: rx_conn (on Arduino)
+  * VCC connected to 3.3V OUT.
 
 ## Gateway States
 

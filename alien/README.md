@@ -1,6 +1,6 @@
 # Alien
 
-The central controller for all the different individual components.
+The central controller for all the different individual components inside the Alien.
 
 ## Wiring
 
