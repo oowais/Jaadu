@@ -11,7 +11,7 @@ The central controller for all the different individual components.
     <th> Connection </th><th> Right </th><th> RasPI Zero W Board </th><th> Left </th><th> Connection </th>
   </tr>
   <tr>
-    <td></td><td>1</td><td rowspan=20> ![](../images/rpi_zero_io_pinouts.jpg)<td>2</td><td>VCC OUT</td>
+    <td></td><td>1</td><td rowspan=20> ![RasPI Zero W Pins](../images/rpi_zero_io_pinouts.jpg)<td>2</td><td>VCC OUT</td>
   </tr>
   <tr>
     <td>Left Eye SDA</td><td>3</td><td>4</td><td></td>
