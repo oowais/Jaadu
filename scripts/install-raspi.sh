@@ -28,7 +28,7 @@ sudo rm -rf /home/pi/brain/
 
 mkdir /home/pi/brain; cd /home/pi/brain
 git init; git config core.sparseCheckout true
-git remote add -f origin https://github.com/oowais/MCP-Alien.git
+git remote add -f origin git@github.com:oowais/Jaadu.git
 echo "alien/*" > .git/info/sparse-checkout
 git checkout master
 
