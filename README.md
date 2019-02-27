@@ -4,7 +4,7 @@ A **FabTerrarium** is a space with different animals/plants which can interact w
 
 **Jaadu** is an alien in the FabTerrarium who is curious about the different animals or plants in the space. It is a small toddler who crawls in the terrarium reading the emotions of the other entities and displaying those emotions in itself.
 
-![Jaadu](images/img.jpg)
+![Jaadu](media/img.jpg)
 
 **PowerHand** is the movement controller for the Alien. Moving it around triggers the Alien to move.
 
@@ -18,7 +18,7 @@ Read more at our [blog](https://students.hci.rwth-aachen.de/category/ws1819/mcp-
 * **alien** : Contains the code for the Alien.
 * **backdoor** : Contains the client side code for communicating with the backdoor over MQTT.
 * **ground** : Contains the code for synchronization between the Emotion Gateways and sending the triggers in the ground to the Alien.
-* **images** : Different images used in the repo.
+* **media** : Different images/videos used in the repo.
 * **models** : All models designed for laser cutting or 3D printing, some discarded and some used.
 * **powerhand** : Code for control of LEDs and triggers sent to Alien in the PowerHand.
 * **scripts** : Contains scripts used in the project.

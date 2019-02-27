@@ -1,8 +1,7 @@
-## Installation
-sudo apt-get install bluetooth libbluetooth-dev
-sudo python3 -m pip install pybluez
+## Powerhand
 
-### PINs
-* D4 - for LED Strip - Khakhi color wire
-* D9 - for button    - Orange color wire
-* Two wires that are taped on their neck are Arduino Nano terminal
+**PowerHand** is the movement controller for the Jaadu. Moving it around triggers the Jaadu to move.
+
+By pressing the button and moving the the powerhand in specific directions, can move Jaadu forward, left and right. Using a gesture via powerhand Jaadu can also say Hi.
+
+![Jaadu](media/img.jpg)
